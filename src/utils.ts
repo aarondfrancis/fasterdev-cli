@@ -18,6 +18,15 @@ export function parsePackageSpec(input: string): { name: string; version?: strin
   return { name: input };
 }
 
+/**
+ * Check if input is a scope-only reference (e.g., "@audit" without a package name)
+ * Returns the scope name if it's scope-only, null otherwise
+ */
+export function getScopeFromInput(input: string): string | null {
+  const match = input.match(/^@([^/@]+)$/);
+  return match ? match[1] : null;
+}
+
 export function resolveInstallType(asSkill?: boolean): InstallType {
   return asSkill ? 'skill' : 'rule';
 }

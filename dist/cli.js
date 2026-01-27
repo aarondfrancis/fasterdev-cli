@@ -92,6 +92,13 @@ var FasterAPI = class {
     return this.request(`/packages/search?${params}`);
   }
   /**
+   * Get all packages in a scope (e.g., "audit" returns all @audit/* packages)
+   */
+  async getPackagesByScope(scope) {
+    const params = new URLSearchParams({ scope });
+    return this.request(`/packages/search?${params}`);
+  }
+  /**
    * Get package info
    */
   async getPackageInfo(name) {
@@ -193,6 +200,10 @@ function parsePackageSpec(input) {
     return { name: match[1], version: match[2] };
   }
   return { name: input };
+}
+function getScopeFromInput(input) {
+  const match = input.match(/^@([^/@]+)$/);
+  return match ? match[1] : null;
 }
 function resolveInstallType(asSkill) {
   return asSkill ? "skill" : "rule";
@@ -1502,7 +1513,6 @@ function registerInstallCommand(program2) {
   program2.command("install <package>").alias("add").description("Install a skill or rule from faster.dev").option("-g, --global", "Install globally instead of to project").option("-t, --tools <tools>", "Comma-separated list of tools to install to").option("--as-skill", "Install as a skill (where supported)").option("-f, --force", "Overwrite existing installations").option("--dry-run", "Show what would be installed without making changes").option("--from-file <path>", "Install from a local package directory").action(async (packageInput, opts) => {
     const { json, verbose } = program2.opts();
     const projectRoot = process.cwd();
-    const { name: packageName, version } = parsePackageSpec(packageInput);
     const options = {
       global: opts.global ?? false,
       tools: opts.tools ? opts.tools.split(",") : void 0,
@@ -1514,6 +1524,62 @@ function registerInstallCommand(program2) {
     const spinner = new SpinnerManager("Detecting tools...", json ?? false);
     try {
       const detectedTools = await resolveDetectedTools(projectRoot, options, defaultTools);
+      const scope = getScopeFromInput(packageInput);
+      if (scope && !opts.fromFile) {
+        const api = new FasterAPI(getConfig());
+        spinner.text(`Fetching packages in @${scope}...`);
+        const scopePackages = await api.getPackagesByScope(scope);
+        if (scopePackages.length === 0) {
+          spinner.fail(`No packages found in scope @${scope}`);
+          if (json) outputJson({ ok: false, error: `No packages found in scope @${scope}` });
+          setExitCode(EXIT_CODES.ERROR);
+          return;
+        }
+        spinner.stop();
+        console.log(chalk8.bold(`
+Installing ${scopePackages.length} package(s) from @${scope}:
+`));
+        const allResults = [];
+        for (const scopePkg of scopePackages) {
+          const pkgSpinner = new SpinnerManager(`Installing ${scopePkg.name}...`, json ?? false);
+          try {
+            const pkg2 = await api.downloadPackage(scopePkg.name);
+            const results2 = await installPackage(pkg2, detectedTools, projectRoot, options);
+            const installType2 = resolveInstallType(options.asSkill);
+            const successTools2 = results2.filter((r) => r.success && !r.skipped).map((r) => r.tool);
+            if (!options.dryRun && successTools2.length > 0) {
+              const registry = await readRegistry(projectRoot, options.global);
+              upsertInstalledPackage(registry, {
+                name: pkg2.manifest.name,
+                version: pkg2.manifest.version,
+                installType: installType2,
+                tools: successTools2,
+                installedAt: (/* @__PURE__ */ new Date()).toISOString(),
+                source: "registry"
+              });
+              await writeRegistry(projectRoot, options.global, registry);
+            }
+            pkgSpinner.stop();
+            allResults.push({ pkg: pkg2, results: results2 });
+            if (!json) {
+              printInstallResults(pkg2, results2);
+            }
+          } catch (error) {
+            pkgSpinner.fail(`Failed to install ${scopePkg.name}: ${stringifyError(error, verbose)}`);
+          }
+        }
+        if (json) {
+          outputJson({
+            scope,
+            packages: allResults.map(({ pkg: pkg2, results: results2 }) => ({
+              package: pkg2.manifest,
+              results: results2
+            }))
+          });
+        }
+        return;
+      }
+      const { name: packageName, version } = parsePackageSpec(packageInput);
       spinner.text(`Fetching package: ${packageName}...`);
       let pkg;
       const isLocal = Boolean(opts.fromFile);

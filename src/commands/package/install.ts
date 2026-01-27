@@ -9,7 +9,7 @@ import {
   upsertInstalledPackage,
 } from '../../registry.js';
 import type { InstallOptions, Package, ToolId } from '../../types.js';
-import { parsePackageSpec, resolveInstallType, stringifyError } from '../../utils.js';
+import { parsePackageSpec, resolveInstallType, stringifyError, getScopeFromInput } from '../../utils.js';
 import { resolveDetectedTools } from '../shared/package-helpers.js';
 import {
   SpinnerManager,
@@ -43,7 +43,6 @@ export function registerInstallCommand(program: Command): void {
     .action(async (packageInput: string, opts: InstallCommandOptions) => {
       const { json, verbose } = program.opts<GlobalOptions>();
       const projectRoot = process.cwd();
-      const { name: packageName, version } = parsePackageSpec(packageInput);
 
       const options: InstallOptions = {
         global: opts.global ?? false,
@@ -58,6 +57,76 @@ export function registerInstallCommand(program: Command): void {
 
       try {
         const detectedTools = await resolveDetectedTools(projectRoot, options, defaultTools);
+
+        // Check if this is a scope-only install (e.g., "@audit" to install all @audit/* packages)
+        const scope = getScopeFromInput(packageInput);
+        if (scope && !opts.fromFile) {
+          const api = new FasterAPI(getConfig());
+          spinner.text(`Fetching packages in @${scope}...`);
+
+          const scopePackages = await api.getPackagesByScope(scope);
+
+          if (scopePackages.length === 0) {
+            spinner.fail(`No packages found in scope @${scope}`);
+            if (json) outputJson({ ok: false, error: `No packages found in scope @${scope}` });
+            setExitCode(EXIT_CODES.ERROR);
+            return;
+          }
+
+          spinner.stop();
+          console.log(chalk.bold(`\nInstalling ${scopePackages.length} package(s) from @${scope}:\n`));
+
+          const allResults: Array<{ pkg: Package; results: InstallResult[] }> = [];
+
+          for (const scopePkg of scopePackages) {
+            const pkgSpinner = new SpinnerManager(`Installing ${scopePkg.name}...`, json ?? false);
+            try {
+              const pkg = await api.downloadPackage(scopePkg.name);
+              const results = await installPackage(pkg, detectedTools, projectRoot, options);
+
+              const installType = resolveInstallType(options.asSkill);
+              const successTools = results
+                .filter((r) => r.success && !r.skipped)
+                .map((r) => r.tool);
+
+              if (!options.dryRun && successTools.length > 0) {
+                const registry = await readRegistry(projectRoot, options.global);
+                upsertInstalledPackage(registry, {
+                  name: pkg.manifest.name,
+                  version: pkg.manifest.version,
+                  installType,
+                  tools: successTools,
+                  installedAt: new Date().toISOString(),
+                  source: 'registry',
+                });
+                await writeRegistry(projectRoot, options.global, registry);
+              }
+
+              pkgSpinner.stop();
+              allResults.push({ pkg, results });
+
+              if (!json) {
+                printInstallResults(pkg, results);
+              }
+            } catch (error) {
+              pkgSpinner.fail(`Failed to install ${scopePkg.name}: ${stringifyError(error, verbose)}`);
+            }
+          }
+
+          if (json) {
+            outputJson({
+              scope,
+              packages: allResults.map(({ pkg, results }) => ({
+                package: pkg.manifest,
+                results,
+              })),
+            });
+          }
+          return;
+        }
+
+        // Single package install
+        const { name: packageName, version } = parsePackageSpec(packageInput);
 
         spinner.text(`Fetching package: ${packageName}...`);
 

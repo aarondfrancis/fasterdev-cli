@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parsePackageSpec, resolveInstallType, stringifyError, sleep } from '../../src/utils.js';
+import { parsePackageSpec, resolveInstallType, stringifyError, sleep, getScopeFromInput } from '../../src/utils.js';
 
 
 test('parsePackageSpec handles unscoped names', () => {
@@ -46,4 +46,19 @@ test('sleep waits at least the requested duration', async () => {
   await sleep(10);
   const elapsed = Date.now() - start;
   assert.ok(elapsed >= 8);
+});
+
+test('getScopeFromInput returns scope for scope-only input', () => {
+  assert.equal(getScopeFromInput('@audit'), 'audit');
+  assert.equal(getScopeFromInput('@my-scope'), 'my-scope');
+});
+
+test('getScopeFromInput returns null for scoped package names', () => {
+  assert.equal(getScopeFromInput('@audit/dead'), null);
+  assert.equal(getScopeFromInput('@scope/pkg@1.0.0'), null);
+});
+
+test('getScopeFromInput returns null for unscoped names', () => {
+  assert.equal(getScopeFromInput('api-conventions'), null);
+  assert.equal(getScopeFromInput('pkg@1.0.0'), null);
 });

@@ -112,6 +112,14 @@ export class FasterAPI {
   }
 
   /**
+   * Get all packages in a scope (e.g., "audit" returns all @audit/* packages)
+   */
+  async getPackagesByScope(scope: string): Promise<PackageSearchResult[]> {
+    const params = new URLSearchParams({ scope });
+    return this.request<PackageSearchResult[]>(`/packages/search?${params}`);
+  }
+
+  /**
    * Get package info
    */
   async getPackageInfo(name: string): Promise<PackageInfo> {
