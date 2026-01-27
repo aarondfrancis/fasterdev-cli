@@ -1,0 +1,13 @@
+{
+    "title": "fasterdev",
+    "description": "Install AI coding assistant skills and rules from faster.dev",
+    "pages": [
+        { "slug": "index", "title": "Introduction" },
+        { "slug": "installation", "title": "Installation" },
+        { "slug": "usage", "title": "Usage" },
+        { "slug": "cli", "title": "CLI Reference" },
+        { "slug": "configuration", "title": "Configuration" },
+        { "slug": "supported-tools", "title": "Supported Tools" },
+        { "slug": "package-format", "title": "Package Format" }
+    ]
+}

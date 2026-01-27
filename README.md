@@ -1,46 +1,46 @@
-# @faster.dev/cli
+# fasterdev
 
 Install AI coding assistant skills and rules from faster.dev to Claude Code, Cursor, Codex, Cline, Roo Code, Continue, Aider, Gemini CLI, Amp, and OpenCode — all with a single command.
 
 ## Installation
 
 ```bash
-npm install -g @faster.dev/cli
+npm install -g fasterdev
 ```
 
 ## Quick Start
 
 ```bash
 # Authenticate with faster.dev
-faster login
+fasterdev login
 
 # Install a rule to all detected tools
-faster install api-conventions
+fasterdev install api-conventions
 
 # Install to specific tools only
-faster install api-conventions --tools claude-code,cursor
+fasterdev install api-conventions --tools claude-code,cursor
 
 # Install as a skill (for tools that support skills)
-faster install docx-generator --as-skill
+fasterdev install docx-generator --as-skill
 
 # Install globally
-faster install api-conventions --global
+fasterdev install api-conventions --global
 ```
 
 ## Supported Tools
 
 | Tool | Rules | Skills | Format |
 |------|-------|--------|--------|
-| Claude Code | ✅ | ✅ | `.claude/rules/*.md`, `.claude/skills/*/SKILL.md` |
-| OpenAI Codex | ✅ | ✅ | `AGENTS.md`, `.codex/skills/*/SKILL.md` |
-| Cursor | ✅ | ❌ | `.cursor/rules/*.mdc` |
-| Cline | ✅ | ❌ | `.clinerules/*.md` |
-| Roo Code | ✅ | ❌ | `.roo/rules/*.md` |
-| Continue.dev | ✅ | ❌ | `.continue/rules/*.md` |
-| Aider | ✅ | ❌ | `CONVENTIONS.md` + `.aider.conf.yml` |
-| Gemini CLI | ✅ | ❌ | `GEMINI.md` |
-| Amp | ✅ | ✅ | `AGENTS.md`, `.agents/skills/*/SKILL.md` |
-| OpenCode | ✅ | ✅ | `.opencode/rules/*.md`, `.opencode/skill/*/SKILL.md` |
+| Claude Code | Yes | Yes | `.claude/rules/*.md`, `.claude/skills/*/SKILL.md` |
+| OpenAI Codex | Yes | Yes | `AGENTS.md`, `.codex/skills/*/SKILL.md` |
+| Cursor | Yes | No | `.cursor/rules/*.mdc` |
+| Cline | Yes | No | `.clinerules/*.md` |
+| Roo Code | Yes | No | `.roo/rules/*.md` |
+| Continue.dev | Yes | No | `.continue/rules/*.md` |
+| Aider | Yes | No | `CONVENTIONS.md` + `.aider.conf.yml` |
+| Gemini CLI | Yes | No | `GEMINI.md` |
+| Amp | Yes | Yes | `AGENTS.md`, `.agents/skills/*/SKILL.md` |
+| OpenCode | Yes | Yes | `.opencode/rules/*.md`, `.opencode/skill/*/SKILL.md` |
 
 ## Commands
 
@@ -48,26 +48,26 @@ faster install api-conventions --global
 
 ```bash
 # Log in to faster.dev
-faster login
+fasterdev login
 
 # Check authentication status
-faster whoami
+fasterdev whoami
 
 # Log out
-faster logout
+fasterdev logout
 ```
 
-`faster login` opens your browser and uses a device code flow.
+`fasterdev login` opens your browser and uses a device code flow.
 Use `--no-browser` if you want to copy the URL manually.
 
 ### Installing Packages
 
 ```bash
 # Install a package
-faster install <package-name>
+fasterdev install <package-name>
 
 # Install from local directory
-faster install . --from-file ./my-package
+fasterdev install . --from-file ./my-package
 
 # Options:
 #   -g, --global     Install globally instead of to project
@@ -81,180 +81,93 @@ faster install . --from-file ./my-package
 
 ```bash
 # Remove a package from all tools
-faster remove <package-name>
+fasterdev remove <package-name>
 
 # Remove from global installation
-faster remove <package-name> --global
+fasterdev remove <package-name> --global
 ```
 
 ### Listing & Searching
 
 ```bash
 # List installed packages
-faster list
+fasterdev list
 
 # List global installations
-faster list --global
+fasterdev list --global
 
 # Search faster.dev
-faster search "api conventions"
+fasterdev search "api conventions"
 
 # Show package info
-faster info api-conventions
+fasterdev info api-conventions
 
 # Show outdated packages
-faster outdated
+fasterdev outdated
 
 # Update packages
-faster update
+fasterdev update
 ```
 
 ### Tool Detection
 
 ```bash
 # Show detected AI coding tools in current directory
-faster detect
+fasterdev detect
 ```
 
 ### Configuration
 
 ```bash
 # Show current configuration
-faster config
+fasterdev config
 
 # Set default tools (only install to these)
-faster config --set-tools claude-code,cursor
+fasterdev config --set-tools claude-code,cursor
 
 # Clear default tools
-faster config --clear-tools
+fasterdev config --clear-tools
 
 # Show config file path
-faster config --path
+fasterdev config --path
 ```
 
 ### Creating Packages
 
 ```bash
 # Initialize a new package in current directory
-faster init
+fasterdev init
 
 # Publish to faster.dev
-faster publish
+fasterdev publish
 
 # Validate without publishing
-faster publish --dry-run
+fasterdev publish --dry-run
 ```
 
-## Package Format
+## Documentation
 
-A faster.dev package consists of:
+See the [docs](./docs) folder for detailed documentation:
 
-```
-my-package/
-├── manifest.json          # Package metadata
-├── rule.md                # Rule content (for type: rule or both)
-├── SKILL.md               # Skill content (for type: skill or both)
-├── cursor.mdc             # Optional tool-specific override
-└── assets/                # Optional supporting files
-```
-
-### manifest.json
-
-```json
-{
-  "name": "api-conventions",
-  "version": "1.0.0",
-  "type": "rule",
-  "description": "REST API design conventions for consistent API development",
-  "compatibility": {
-    "rules": ["claude-code", "cursor", "cline", "roo-code", "continue", "aider", "gemini", "codex", "amp", "opencode"],
-    "skills": ["claude-code", "codex", "amp", "opencode"]
-  },
-  "install": {
-    "cursor": { "file": "cursor.mdc" },
-    "aider": { "action": "add-to-read-config" }
-  }
-}
-```
-
-### rule.md
-
-```markdown
----
-name: api-conventions
-description: REST API design conventions
-globs: "**/*.ts"
-paths:
-  - "src/api/**/*"
----
-
-# API Conventions
-
-- Use kebab-case for URL paths
-- Use camelCase for JSON properties
-- Return consistent error formats
-```
-
-### SKILL.md
-
-```markdown
----
-name: api-conventions
-description: REST API design conventions skill
----
-
-# API Conventions
-
-When working with REST APIs, follow these guidelines:
-
-## Naming
-- Use kebab-case for URL paths
-- Use camelCase for JSON properties
-
-## Error Handling
-- Return consistent error formats with request IDs
-```
-
-## Format Conversions
-
-The CLI automatically converts between formats:
-
-| Source | Target | Conversion |
-|--------|--------|------------|
-| Markdown + frontmatter | Cursor (.mdc) | `name` → `description`, `paths` → `globs` |
-| Markdown + frontmatter | Claude Code | Keep `paths`, strip unsupported fields |
-| Markdown + frontmatter | Cline/Roo | Strip frontmatter to plain markdown |
-| Markdown + frontmatter | Continue | Keep `name`, `description`, `globs` |
-| Any | Codex/Amp | Append as section to AGENTS.md |
-| Any | Gemini | Append as section to GEMINI.md |
-| Any | Aider | Create file + add to `.aider.conf.yml` read list |
+- [Introduction](./docs/index.md)
+- [Installation](./docs/installation.md)
+- [Usage](./docs/usage.md)
+- [CLI Reference](./docs/cli.md)
+- [Configuration](./docs/configuration.md)
+- [Supported Tools](./docs/supported-tools.md)
+- [Package Format](./docs/package-format.md)
 
 ## Environment Variables
 
 - `FASTER_API_URL` - Override the API URL (for self-hosted)
 - `FASTER_API_KEY` - Provide auth token without login
 
-Local API example (Herd):
-`FASTER_API_URL=https://faster.test/api/v1`
-
-## Configuration File
-
-Config is stored at `~/.faster/config.json`:
-
-```json
-{
-  "apiUrl": "https://faster.dev/api/v1",
-  "authToken": "your-auth-token",
-  "defaultTools": ["claude-code", "cursor"]
-}
-```
-
 ## Local Development
 
 ```bash
 # Clone and install
-git clone https://github.com/faster-dev/cli
-cd cli
+git clone https://github.com/aarondfrancis/fasterdev-cli
+cd fasterdev-cli
 npm install
 
 # Run in development mode
