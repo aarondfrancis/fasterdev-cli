@@ -5,11 +5,14 @@ import {
   serializeFrontmatter,
   toMDCFormat,
   toClaudeCodeFormat,
+  toClaudeCodeSkillFormat,
+  toGenericSkillFormat,
   toContinueFormat,
   toPlainMarkdown,
   toAgentsMdSection,
   toGeminiMdSection,
   convertToToolFormat,
+  convertSkillToToolFormat,
   toAiderConfigEntry,
   createSkillMd,
   parseSkillFrontmatter,
@@ -333,4 +336,107 @@ test('serializeFrontmatter: creates valid YAML frontmatter', () => {
   assert.ok(result.startsWith('---\n'));
   assert.ok(result.includes('name: Test'));
   assert.ok(result.includes('Body'));
+});
+
+// ============================================================================
+// Skill invocation control tests (Claude Code specific)
+// ============================================================================
+
+const skillWithInvocationControl = `---
+name: deploy-prod
+description: Deploy to production
+disable-model-invocation: true
+user-invocable: true
+---
+
+# Deploy to Production
+
+Deployment instructions here.
+`;
+
+const skillModelOnly = `---
+name: context-loader
+description: Background context
+disable-model-invocation: false
+user-invocable: false
+---
+
+# Context Loader
+
+This skill provides background context.
+`;
+
+test('toClaudeCodeSkillFormat: preserves invocation control fields', () => {
+  const converted = toClaudeCodeSkillFormat(skillWithInvocationControl);
+  const { frontmatter, body } = parseFrontmatter(converted);
+  assert.equal(frontmatter.name, 'deploy-prod');
+  assert.equal(frontmatter.description, 'Deploy to production');
+  assert.equal(frontmatter['disable-model-invocation'], true);
+  assert.equal(frontmatter['user-invocable'], true);
+  assert.ok(body.includes('Deploy to Production'));
+});
+
+test('toClaudeCodeSkillFormat: preserves model-only skill settings', () => {
+  const converted = toClaudeCodeSkillFormat(skillModelOnly);
+  const { frontmatter } = parseFrontmatter(converted);
+  assert.equal(frontmatter['disable-model-invocation'], false);
+  assert.equal(frontmatter['user-invocable'], false);
+});
+
+test('toGenericSkillFormat: strips invocation control fields', () => {
+  const converted = toGenericSkillFormat(skillWithInvocationControl);
+  const { frontmatter, body } = parseFrontmatter(converted);
+  assert.equal(frontmatter.name, 'deploy-prod');
+  assert.equal(frontmatter.description, 'Deploy to production');
+  assert.equal(frontmatter['disable-model-invocation'], undefined);
+  assert.equal(frontmatter['user-invocable'], undefined);
+  assert.ok(body.includes('Deploy to Production'));
+});
+
+test('convertSkillToToolFormat: uses Claude format for claude-code', () => {
+  const converted = convertSkillToToolFormat(skillWithInvocationControl, TOOL_CONFIGS['claude-code']);
+  const { frontmatter } = parseFrontmatter(converted);
+  assert.equal(frontmatter['disable-model-invocation'], true);
+});
+
+test('convertSkillToToolFormat: uses generic format for other tools', () => {
+  const codexConverted = convertSkillToToolFormat(skillWithInvocationControl, TOOL_CONFIGS.codex);
+  const { frontmatter: codexFm } = parseFrontmatter(codexConverted);
+  assert.equal(codexFm['disable-model-invocation'], undefined);
+
+  const ampConverted = convertSkillToToolFormat(skillWithInvocationControl, TOOL_CONFIGS.amp);
+  const { frontmatter: ampFm } = parseFrontmatter(ampConverted);
+  assert.equal(ampFm['disable-model-invocation'], undefined);
+});
+
+test('createSkillMd: supports invocation control options', () => {
+  const content = createSkillMd('dangerous-action', 'Does something risky', 'Body', {
+    license: 'MIT',
+    disableModelInvocation: true,
+    userInvocable: true,
+  });
+  const { frontmatter } = parseFrontmatter(content);
+  assert.equal(frontmatter.name, 'dangerous-action');
+  assert.equal(frontmatter.license, 'MIT');
+  assert.equal(frontmatter['disable-model-invocation'], true);
+  assert.equal(frontmatter['user-invocable'], true);
+});
+
+test('createSkillMd: legacy string license argument still works', () => {
+  const content = createSkillMd('test', 'desc', 'body', 'MIT');
+  const { frontmatter } = parseFrontmatter(content);
+  assert.equal(frontmatter.license, 'MIT');
+});
+
+test('parseSkillFrontmatter: extracts invocation control fields', () => {
+  const { frontmatter } = parseSkillFrontmatter(skillWithInvocationControl);
+  assert.equal(frontmatter['disable-model-invocation'], true);
+  assert.equal(frontmatter['user-invocable'], true);
+});
+
+test('parseSkillFrontmatter: handles missing invocation fields', () => {
+  const simple = `---\nname: simple\ndescription: test\n---\n\nBody`;
+  const { frontmatter } = parseSkillFrontmatter(simple);
+  assert.equal(frontmatter['disable-model-invocation'], undefined);
+  assert.equal(frontmatter['user-invocable'], undefined);
 });

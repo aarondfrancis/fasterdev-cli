@@ -173,6 +173,9 @@ export interface SkillFrontmatter {
   name: string;
   description: string;
   license?: string;
+  // Claude Code invocation control
+  'disable-model-invocation'?: boolean; // Only user can invoke (not auto-invoked by Claude)
+  'user-invocable'?: boolean; // Set to false if only Claude should invoke (not user)
   [key: string]: unknown;
 }
 

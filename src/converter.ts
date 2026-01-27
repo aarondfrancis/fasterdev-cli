@@ -77,7 +77,7 @@ export function toMDCFormat(content: string): string {
 
 /**
  * Convert a rule to Claude Code format
- * 
+ *
  * Claude Code uses:
  * - paths (array of glob patterns)
  * - No alwaysApply (rules without paths always apply)
@@ -106,6 +106,74 @@ export function toClaudeCodeFormat(content: string): string {
   }
 
   return serializeFrontmatter(ccFrontmatter, body);
+}
+
+/**
+ * Convert a skill to Claude Code format
+ *
+ * Claude Code skills support:
+ * - name (required)
+ * - description (required)
+ * - disable-model-invocation (optional) - only user can invoke
+ * - user-invocable (optional) - set to false if only Claude should invoke
+ */
+export function toClaudeCodeSkillFormat(content: string): string {
+  const { frontmatter, body } = parseFrontmatter(content);
+
+  const ccFrontmatter: Record<string, unknown> = {};
+
+  // Required fields
+  if (frontmatter.name) {
+    ccFrontmatter.name = frontmatter.name;
+  }
+  if (frontmatter.description) {
+    ccFrontmatter.description = frontmatter.description;
+  }
+
+  // Invocation control (Claude Code specific)
+  if (frontmatter['disable-model-invocation'] !== undefined) {
+    ccFrontmatter['disable-model-invocation'] = frontmatter['disable-model-invocation'];
+  }
+  if (frontmatter['user-invocable'] !== undefined) {
+    ccFrontmatter['user-invocable'] = frontmatter['user-invocable'];
+  }
+
+  // Keep license if present
+  if (frontmatter.license) {
+    ccFrontmatter.license = frontmatter.license;
+  }
+
+  return serializeFrontmatter(ccFrontmatter, body);
+}
+
+/**
+ * Convert a skill for tools that don't support invocation control
+ * Strips Claude Code specific fields
+ */
+export function toGenericSkillFormat(content: string): string {
+  const { frontmatter, body } = parseFrontmatter(content);
+
+  const genericFrontmatter: Record<string, unknown> = {};
+
+  // Keep basic fields
+  if (frontmatter.name) {
+    genericFrontmatter.name = frontmatter.name;
+  }
+  if (frontmatter.description) {
+    genericFrontmatter.description = frontmatter.description;
+  }
+  if (frontmatter.license) {
+    genericFrontmatter.license = frontmatter.license;
+  }
+
+  // Strip disable-model-invocation and user-invocable
+  // as other tools don't support them
+
+  if (Object.keys(genericFrontmatter).length === 0) {
+    return body;
+  }
+
+  return serializeFrontmatter(genericFrontmatter, body);
 }
 
 /**
@@ -175,7 +243,7 @@ export function toAiderConfigEntry(filePath: string): string {
 }
 
 /**
- * Convert content to the appropriate format for a tool
+ * Convert rule content to the appropriate format for a tool
  */
 export function convertToToolFormat(
   content: string,
@@ -205,21 +273,59 @@ export function convertToToolFormat(
 }
 
 /**
+ * Convert skill content to the appropriate format for a tool
+ */
+export function convertSkillToToolFormat(
+  content: string,
+  toolConfig: ToolConfig
+): string {
+  // Only Claude Code supports invocation control fields
+  if (toolConfig.id === 'claude-code') {
+    return toClaudeCodeSkillFormat(content);
+  }
+
+  // Other tools (codex, amp, opencode) don't support these fields
+  return toGenericSkillFormat(content);
+}
+
+/**
  * Create a SKILL.md file with proper frontmatter
+ *
+ * @param name - Skill name
+ * @param description - Skill description
+ * @param body - Markdown body content
+ * @param optionsOrLicense - Either a license string (legacy) or options object
  */
 export function createSkillMd(
   name: string,
   description: string,
   body: string,
-  license?: string
+  optionsOrLicense?: string | {
+    license?: string;
+    disableModelInvocation?: boolean;
+    userInvocable?: boolean;
+  }
 ): string {
   const frontmatter: SkillFrontmatter = {
     name,
     description,
   };
-  if (license) {
-    frontmatter.license = license;
+
+  // Handle both legacy string argument and new options object
+  if (typeof optionsOrLicense === 'string') {
+    frontmatter.license = optionsOrLicense;
+  } else if (optionsOrLicense) {
+    if (optionsOrLicense.license) {
+      frontmatter.license = optionsOrLicense.license;
+    }
+    if (optionsOrLicense.disableModelInvocation !== undefined) {
+      frontmatter['disable-model-invocation'] = optionsOrLicense.disableModelInvocation;
+    }
+    if (optionsOrLicense.userInvocable !== undefined) {
+      frontmatter['user-invocable'] = optionsOrLicense.userInvocable;
+    }
   }
+
   return serializeFrontmatter(frontmatter, body);
 }
 
@@ -236,6 +342,8 @@ export function parseSkillFrontmatter(content: string): {
       name: (frontmatter.name as string) || 'unnamed',
       description: (frontmatter.description as string) || '',
       license: frontmatter.license as string | undefined,
+      'disable-model-invocation': frontmatter['disable-model-invocation'] as boolean | undefined,
+      'user-invocable': frontmatter['user-invocable'] as boolean | undefined,
     },
     body,
   };

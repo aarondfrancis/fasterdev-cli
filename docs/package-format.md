@@ -97,6 +97,28 @@ When working with REST APIs, follow these guidelines:
 - Return consistent error formats with request IDs
 ```
 
+### Invocation Control (Claude Code only)
+
+Claude Code supports additional frontmatter fields to control how skills are invoked:
+
+```markdown
+---
+name: deploy-production
+description: Deploy to production environment
+disable-model-invocation: true
+---
+
+# Deploy to Production
+...
+```
+
+| Field | Description |
+|-------|-------------|
+| `disable-model-invocation` | When `true`, only the user can invoke this skill via `/skill-name`. Claude cannot auto-invoke it. Use for dangerous operations like deployments. |
+| `user-invocable` | When `false`, only Claude can invoke this skill. The user cannot invoke it via `/skill-name`. Use for background context that isn't actionable as a command. |
+
+These fields are only supported by Claude Code. When installing to other tools, they are automatically stripped.
+
 ## Tool-Specific Overrides
 
 You can provide tool-specific versions of your content:
