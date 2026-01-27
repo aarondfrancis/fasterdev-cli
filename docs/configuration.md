@@ -2,7 +2,7 @@
 
 ## Config File Location
 
-Configuration is stored at `~/.faster/config.json`.
+Configuration is stored at `~/.faster-dev/config.json`.
 
 View the path:
 

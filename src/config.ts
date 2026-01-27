@@ -1,4 +1,6 @@
 import Conf from 'conf';
+import { homedir } from 'os';
+import { join } from 'path';
 import type { CLIConfig, ToolId } from './types.js';
 
 const DEFAULT_CONFIG: CLIConfig = {
@@ -6,9 +8,10 @@ const DEFAULT_CONFIG: CLIConfig = {
   analytics: true,
 };
 
-// Store config in ~/.faster/config.json
+// Store config in ~/.faster-dev/config.json
 const store = new Conf<CLIConfig>({
-  projectName: 'faster',
+  projectName: 'faster-dev',
+  cwd: join(homedir(), '.faster-dev'),
   defaults: DEFAULT_CONFIG,
 });
 

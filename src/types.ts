@@ -90,7 +90,7 @@ export interface InstallOptions {
   dryRun?: boolean; // Just show what would happen
 }
 
-// CLI config stored in ~/.faster/config.json
+// CLI config stored in ~/.faster-dev/config.json
 export interface CLIConfig {
   authToken?: string;
   apiUrl: string;
