@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-01-27
+
 ### Added
 - Initial release of @faster.dev/cli
 - `faster install` command to install skills from faster.dev
@@ -14,4 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Interactive prompts for selecting agent types and skill targets
 - Automatic detection of project configuration files
 
-[Unreleased]: https://github.com/aarondfrancis/faster-cli/compare/v0.1.0...HEAD
+
+[Unreleased]: https://github.com/aarondfrancis/faster-cli/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/aarondfrancis/fasterdev-cli/releases/tag/v0.1.1
