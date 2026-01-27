@@ -173,6 +173,7 @@ export interface SkillFrontmatter {
   name: string;
   description: string;
   license?: string;
+  [key: string]: unknown;
 }
 
 // Local install registry

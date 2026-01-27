@@ -24,7 +24,7 @@ export function getConfig(): CLIConfig {
     apiUrl,
     authToken,
     defaultTools: store.get('defaultTools'),
-    analytics: analyticsEnv ? false : store.get('analytics', DEFAULT_CONFIG.analytics),
+    analytics: analyticsEnv ? false : store.get('analytics', DEFAULT_CONFIG.analytics ?? true),
   };
 }
 

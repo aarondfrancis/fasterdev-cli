@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import fetch, { type RequestInit } from 'node-fetch';
 import type {
   Package,
   PackageManifest,
