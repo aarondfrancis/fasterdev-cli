@@ -494,6 +494,66 @@ async function handleSpecialAction(
       };
     }
 
+    case 'add-with-gemini-import': {
+      // Gemini CLI: write rule to .gemini/rules/ and add @import to GEMINI.md
+      const rulesDir = options.global
+        ? tool.config.rules.globalPath
+        : path.join(projectRoot, '.gemini', 'rules');
+      const rulePath = path.join(rulesDir, `${pkg.manifest.name}.md`);
+
+      const geminiMdPath = options.global
+        ? path.join(path.dirname(tool.config.rules.globalPath), 'GEMINI.md')
+        : path.join(projectRoot, 'GEMINI.md');
+
+      if (options.dryRun) {
+        return {
+          tool: toolId,
+          toolName: tool.config.name,
+          type: 'rule',
+          path: rulePath,
+          success: true,
+          skipped: true,
+          skipReason: 'Dry run - would create rule file and add @import to GEMINI.md',
+        };
+      }
+
+      // Check if rule file exists
+      if (!options.force && await fileExists(rulePath)) {
+        return {
+          tool: toolId,
+          toolName: tool.config.name,
+          type: 'rule',
+          path: rulePath,
+          success: false,
+          skipped: true,
+          skipReason: 'File already exists (use --force to overwrite)',
+        };
+      }
+
+      // Write the rule file
+      await ensureDir(rulesDir);
+      await fs.writeFile(rulePath, body, 'utf-8');
+
+      // Add @import to GEMINI.md
+      const existingGemini = await readFile(geminiMdPath) || '';
+      const importLine = `@rules/${pkg.manifest.name}.md`;
+
+      if (!existingGemini.includes(importLine)) {
+        const newContent = existingGemini.trim()
+          ? existingGemini.trimEnd() + '\n' + importLine + '\n'
+          : importLine + '\n';
+        await fs.writeFile(geminiMdPath, newContent, 'utf-8');
+      }
+
+      return {
+        tool: toolId,
+        toolName: tool.config.name,
+        type: 'rule',
+        path: rulePath,
+        success: true,
+      };
+    }
+
     default:
       return {
         tool: toolId,

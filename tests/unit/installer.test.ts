@@ -603,13 +603,13 @@ test('Amp: installs rule to .amp/rules/', async () => {
   assert.ok(content.includes('# amp-test'));
 });
 
-test('Amp: installs skill to .amp/skills/', async () => {
+test('Amp: installs skill to .agents/skills/', async () => {
   const root = await tempProject();
   const pkg = makeSimpleSkillPackage('amp-skill', ['amp']);
   const results = await installPackage(pkg, [tool('amp', root)], root, { global: false, asSkill: true });
 
   assert.equal(results[0].success, true);
-  const skillPath = path.join(root, '.amp', 'skills', 'amp-skill', 'SKILL.md');
+  const skillPath = path.join(root, '.agents', 'skills', 'amp-skill', 'SKILL.md');
   await fs.access(skillPath);
 });
 

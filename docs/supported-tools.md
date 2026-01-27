@@ -14,6 +14,7 @@ fasterdev supports the following AI coding assistants:
 | Gemini CLI | Yes | No | `GEMINI.md` |
 | Amp | Yes | Yes | `AGENTS.md`, `.agents/skills/*/SKILL.md` |
 | OpenCode | Yes | Yes | `.opencode/rules/*.md`, `.opencode/skill/*/SKILL.md` |
+| Antigravity | Yes | Yes | `.agent/rules/*.md`, `.agent/skills/*/SKILL.md` |
 
 ## Format Conversions
 
@@ -26,7 +27,7 @@ fasterdev automatically converts between formats when installing:
 | Markdown + frontmatter | Cline/Roo | Strips frontmatter to plain markdown |
 | Markdown + frontmatter | Continue | Keeps `name`, `description`, `globs` |
 | Any | Codex/Amp | Appends as section to `AGENTS.md` |
-| Any | Gemini | Appends as section to `GEMINI.md` |
+| Any | Gemini | Creates `.gemini/rules/` file and adds `@import` to `GEMINI.md` |
 | Any | Aider | Creates file + adds to `.aider.conf.yml` read list |
 
 ## Tool Detection
@@ -45,8 +46,10 @@ This checks for:
 - `.continue/` directory
 - `.aider.conf.yml` file
 - `AGENTS.md` file
-- `GEMINI.md` file
+- `GEMINI.md` or `.gemini/` directory
+- `.agents/` directory (Amp)
 - `.opencode/` directory
+- `.agent/` directory (Antigravity)
 
 ## Installing to Specific Tools
 

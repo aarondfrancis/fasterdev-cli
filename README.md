@@ -1,6 +1,6 @@
 # fasterdev
 
-Install AI coding assistant skills and rules from faster.dev to Claude Code, Cursor, Codex, Cline, Roo Code, Continue, Aider, Gemini CLI, Amp, and OpenCode — all with a single command.
+Install AI coding assistant skills and rules from faster.dev to Claude Code, Cursor, Codex, Cline, Roo Code, Continue, Aider, Gemini CLI, Amp, OpenCode, and Antigravity — all with a single command.
 
 ## Installation
 
@@ -41,6 +41,7 @@ fasterdev install api-conventions --global
 | Gemini CLI | Yes | No | `GEMINI.md` |
 | Amp | Yes | Yes | `AGENTS.md`, `.agents/skills/*/SKILL.md` |
 | OpenCode | Yes | Yes | `.opencode/rules/*.md`, `.opencode/skill/*/SKILL.md` |
+| Antigravity | Yes | Yes | `.agent/rules/*.md`, `.agent/skills/*/SKILL.md` |
 
 ## Commands
 

@@ -134,12 +134,15 @@ var FasterAPI = class {
 
 // src/config.ts
 import Conf from "conf";
+import { homedir } from "os";
+import { join } from "path";
 var DEFAULT_CONFIG = {
   apiUrl: "https://faster.dev/api/v1",
   analytics: true
 };
 var store = new Conf({
-  projectName: "faster",
+  projectName: "faster-dev",
+  cwd: join(homedir(), ".faster-dev"),
   defaults: DEFAULT_CONFIG
 });
 function getConfig() {
@@ -150,7 +153,7 @@ function getConfig() {
     apiUrl,
     authToken,
     defaultTools: store.get("defaultTools"),
-    analytics: analyticsEnv ? false : store.get("analytics", DEFAULT_CONFIG.analytics)
+    analytics: analyticsEnv ? false : store.get("analytics", DEFAULT_CONFIG.analytics ?? true)
   };
 }
 function getAuthToken() {
@@ -371,7 +374,7 @@ function registerWhoamiCommand(program2) {
         outputJson({ authenticated: false });
       } else {
         console.log(chalk4.yellow("Not logged in"));
-        console.log(chalk4.dim("Run `faster login` to authenticate"));
+        console.log(chalk4.dim("Run `fasterdev login` to authenticate"));
       }
       setExitCode(EXIT_CODES.AUTH_REQUIRED);
       return;
@@ -634,8 +637,8 @@ var TOOL_CONFIGS = {
     id: "amp",
     name: "Amp (Sourcegraph)",
     detect: {
-      projectDirs: [".amp", ".claude"],
-      globalDirs: [path.join(home, ".config", "amp"), path.join(home, ".claude")],
+      projectDirs: [".agents", ".amp", ".claude"],
+      globalDirs: [path.join(home, ".config", "amp"), path.join(home, ".config", "agents")],
       configFiles: ["AGENTS.md", "AGENT.md"]
     },
     rules: {
@@ -645,8 +648,8 @@ var TOOL_CONFIGS = {
       fileExtension: ".md"
     },
     skills: {
-      projectPath: ".amp/skills",
-      globalPath: path.join(home, ".claude", "skills")
+      projectPath: ".agents/skills",
+      globalPath: path.join(home, ".config", "agents", "skills")
     }
   },
   opencode: {
@@ -667,6 +670,25 @@ var TOOL_CONFIGS = {
       projectPath: ".opencode/skill",
       globalPath: path.join(home, ".config", "opencode", "skill")
     }
+  },
+  antigravity: {
+    id: "antigravity",
+    name: "Antigravity",
+    detect: {
+      projectDirs: [".agent"],
+      globalDirs: [path.join(home, ".gemini", "antigravity")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".agent/rules",
+      globalPath: path.join(home, ".gemini", "antigravity", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".agent/skills",
+      globalPath: path.join(home, ".gemini", "antigravity", "skills")
+    }
   }
 };
 var RULE_TOOLS = Object.keys(TOOL_CONFIGS);
@@ -680,7 +702,8 @@ var DEFAULT_TOOL_PRIORITY = [
   "aider",
   "gemini",
   "amp",
-  "opencode"
+  "opencode",
+  "antigravity"
 ];
 
 // src/detector.ts
@@ -1251,6 +1274,48 @@ ${body}
         config.read = fileName;
       }
       await fs2.writeFile(configPath, YAML2.stringify(config), "utf-8");
+      return {
+        tool: toolId,
+        toolName: tool.config.name,
+        type: "rule",
+        path: rulePath,
+        success: true
+      };
+    }
+    case "add-with-gemini-import": {
+      const rulesDir = options.global ? tool.config.rules.globalPath : path3.join(projectRoot, ".gemini", "rules");
+      const rulePath = path3.join(rulesDir, `${pkg.manifest.name}.md`);
+      const geminiMdPath = options.global ? path3.join(path3.dirname(tool.config.rules.globalPath), "GEMINI.md") : path3.join(projectRoot, "GEMINI.md");
+      if (options.dryRun) {
+        return {
+          tool: toolId,
+          toolName: tool.config.name,
+          type: "rule",
+          path: rulePath,
+          success: true,
+          skipped: true,
+          skipReason: "Dry run - would create rule file and add @import to GEMINI.md"
+        };
+      }
+      if (!options.force && await fileExists(rulePath)) {
+        return {
+          tool: toolId,
+          toolName: tool.config.name,
+          type: "rule",
+          path: rulePath,
+          success: false,
+          skipped: true,
+          skipReason: "File already exists (use --force to overwrite)"
+        };
+      }
+      await ensureDir(rulesDir);
+      await fs2.writeFile(rulePath, body, "utf-8");
+      const existingGemini = await readFile(geminiMdPath) || "";
+      const importLine = `@rules/${pkg.manifest.name}.md`;
+      if (!existingGemini.includes(importLine)) {
+        const newContent = existingGemini.trim() ? existingGemini.trimEnd() + "\n" + importLine + "\n" : importLine + "\n";
+        await fs2.writeFile(geminiMdPath, newContent, "utf-8");
+      }
       return {
         tool: toolId,
         toolName: tool.config.name,

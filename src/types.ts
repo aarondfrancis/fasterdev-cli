@@ -9,7 +9,8 @@ export type ToolId =
   | 'aider'
   | 'gemini'
   | 'amp'
-  | 'opencode';
+  | 'opencode'
+  | 'antigravity';
 
 // Package types
 export type PackageType = 'rule' | 'skill' | 'both';
@@ -35,7 +36,7 @@ export interface PackageManifest {
 
 export interface InstallOverride {
   file?: string; // Use a different file for this tool
-  action?: 'append-to-agents-md' | 'append-to-gemini-md' | 'add-to-read-config';
+  action?: 'append-to-agents-md' | 'append-to-gemini-md' | 'add-to-read-config' | 'add-with-gemini-import';
   disabled?: boolean; // Skip this tool
 }
 

@@ -154,8 +154,8 @@ export const TOOL_CONFIGS: Record<ToolId, ToolConfig> = {
     id: 'amp',
     name: 'Amp (Sourcegraph)',
     detect: {
-      projectDirs: ['.amp', '.claude'],
-      globalDirs: [path.join(home, '.config', 'amp'), path.join(home, '.claude')],
+      projectDirs: ['.agents', '.amp', '.claude'],
+      globalDirs: [path.join(home, '.config', 'amp'), path.join(home, '.config', 'agents')],
       configFiles: ['AGENTS.md', 'AGENT.md'],
     },
     rules: {
@@ -165,8 +165,8 @@ export const TOOL_CONFIGS: Record<ToolId, ToolConfig> = {
       fileExtension: '.md',
     },
     skills: {
-      projectPath: '.amp/skills',
-      globalPath: path.join(home, '.claude', 'skills'),
+      projectPath: '.agents/skills',
+      globalPath: path.join(home, '.config', 'agents', 'skills'),
     },
   },
 
@@ -189,10 +189,30 @@ export const TOOL_CONFIGS: Record<ToolId, ToolConfig> = {
       globalPath: path.join(home, '.config', 'opencode', 'skill'),
     },
   },
+
+  antigravity: {
+    id: 'antigravity',
+    name: 'Antigravity',
+    detect: {
+      projectDirs: ['.agent'],
+      globalDirs: [path.join(home, '.gemini', 'antigravity')],
+      configFiles: [],
+    },
+    rules: {
+      projectPath: '.agent/rules',
+      globalPath: path.join(home, '.gemini', 'antigravity', 'rules'),
+      format: 'markdown',
+      fileExtension: '.md',
+    },
+    skills: {
+      projectPath: '.agent/skills',
+      globalPath: path.join(home, '.gemini', 'antigravity', 'skills'),
+    },
+  },
 };
 
 // Tools that support skills (Agent Skills standard)
-export const SKILL_TOOLS: ToolId[] = ['claude-code', 'codex', 'cursor', 'amp', 'opencode'];
+export const SKILL_TOOLS: ToolId[] = ['claude-code', 'codex', 'cursor', 'amp', 'opencode', 'antigravity'];
 
 // Tools that support rules (all of them)
 export const RULE_TOOLS: ToolId[] = Object.keys(TOOL_CONFIGS) as ToolId[];
@@ -209,4 +229,5 @@ export const DEFAULT_TOOL_PRIORITY: ToolId[] = [
   'gemini',
   'amp',
   'opencode',
+  'antigravity',
 ];

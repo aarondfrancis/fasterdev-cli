@@ -181,6 +181,13 @@ test('detects Amp via AGENTS.md file', async () => {
   assert.ok(result);
 });
 
+test('detects Amp via .agents directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, '.agents'), { recursive: true });
+  const result = await detectTool('amp', root);
+  assert.ok(result?.projectPath);
+});
+
 test('detects OpenCode via .opencode directory', async () => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
   await fs.mkdir(path.join(root, '.opencode'), { recursive: true });
@@ -193,6 +200,13 @@ test('detects OpenCode via opencode.json file', async () => {
   await fs.writeFile(path.join(root, 'opencode.json'), '{}');
   const result = await detectTool('opencode', root);
   assert.ok(result);
+});
+
+test('detects Antigravity via .agent directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, '.agent'), { recursive: true });
+  const result = await detectTool('antigravity', root);
+  assert.ok(result?.projectPath);
 });
 
 // --- Skills support detection ---
@@ -208,26 +222,28 @@ test('getSkillTools filters to only skill-capable tools', () => {
     { config: TOOL_CONFIGS.gemini, projectPath: '.', globalPath: null },
     { config: TOOL_CONFIGS.amp, projectPath: '.', globalPath: null },
     { config: TOOL_CONFIGS.opencode, projectPath: '.', globalPath: null },
+    { config: TOOL_CONFIGS.antigravity, projectPath: '.', globalPath: null },
   ];
-  
+
   const skillTools = getSkillTools(allTools);
   const skillIds = skillTools.map(t => t.config.id);
-  
+
   // Should include skill-capable tools
   assert.ok(skillIds.includes('claude-code'));
   assert.ok(skillIds.includes('cursor'));
   assert.ok(skillIds.includes('codex'));
   assert.ok(skillIds.includes('amp'));
   assert.ok(skillIds.includes('opencode'));
-  
+  assert.ok(skillIds.includes('antigravity'));
+
   // Should exclude non-skill tools
   assert.ok(!skillIds.includes('cline'));
   assert.ok(!skillIds.includes('roo-code'));
   assert.ok(!skillIds.includes('continue'));
   assert.ok(!skillIds.includes('aider'));
   assert.ok(!skillIds.includes('gemini'));
-  
-  assert.equal(skillTools.length, 5);
+
+  assert.equal(skillTools.length, 6);
 });
 
 test('filterTools returns subset matching tool ids', () => {
