@@ -1,0 +1,45 @@
+{
+  "name": "api-conventions",
+  "version": "1.0.0",
+  "type": "both",
+  "description": "REST API design conventions for consistent, well-documented APIs",
+  "author": "faster.dev",
+  "license": "MIT",
+  "compatibility": {
+    "rules": [
+      "claude-code",
+      "cursor",
+      "cline",
+      "roo-code",
+      "continue",
+      "aider",
+      "gemini",
+      "codex",
+      "amp",
+      "opencode"
+    ],
+    "skills": [
+      "claude-code",
+      "codex",
+      "amp",
+      "opencode"
+    ]
+  },
+  "install": {
+    "cursor": {
+      "file": "cursor.mdc"
+    },
+    "aider": {
+      "action": "add-to-read-config"
+    },
+    "codex": {
+      "action": "append-to-agents-md"
+    },
+    "amp": {
+      "action": "append-to-agents-md"
+    },
+    "gemini": {
+      "action": "append-to-gemini-md"
+    }
+  }
+}

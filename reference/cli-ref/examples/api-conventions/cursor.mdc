@@ -1,0 +1,51 @@
+---
+description: REST API design conventions for consistent, well-documented APIs
+globs: "**/*.{ts,js,php,py,rb,go}"
+alwaysApply: false
+---
+
+# REST API Design Conventions
+
+## URL Structure
+
+- Use **kebab-case** for URL paths: `/user-profiles` not `/userProfiles`
+- Use **plural nouns** for collections: `/users` not `/user`
+- Nest resources logically: `/users/{id}/posts`
+- Keep URLs shallow (max 3 levels of nesting)
+
+## HTTP Methods
+
+- `GET` - Retrieve resources (idempotent, cacheable)
+- `POST` - Create new resources
+- `PUT` - Replace entire resource
+- `PATCH` - Partial update
+- `DELETE` - Remove resource
+
+## Request/Response Format
+
+- Use **camelCase** for JSON property names
+- Return appropriate HTTP status codes
+- Include request IDs in responses for tracing
+
+## Error Response Format
+
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human readable message",
+    "details": [...],
+    "requestId": "req_abc123"
+  }
+}
+```
+
+## Status Codes
+
+- `200` Success | `201` Created | `204` No Content
+- `400` Bad Request | `401` Unauthorized | `403` Forbidden | `404` Not Found | `422` Validation Error
+- `500` Internal Server Error
+
+## Pagination
+
+Use cursor-based pagination with `cursor` and `hasMore` fields.
