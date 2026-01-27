@@ -122,6 +122,23 @@ test('search with type filter', async () => {
   assert.equal(url.searchParams.get('type'), 'skill');
 });
 
+test('getPackagesByScope fetches packages in a scope', async () => {
+  const scopePackages = [
+    { name: '@audit/dead', version: '1.0.0', type: 'skill', description: 'Dead code' },
+    { name: '@audit/todos', version: '1.0.0', type: 'skill', description: 'TODOs' },
+  ];
+
+  const { fetcher, requests } = createFetchStub([{ json: scopePackages }]);
+  const api = new FasterAPI({ apiUrl: 'https://api.test' }, fetcher as any);
+
+  const result = await api.getPackagesByScope('audit');
+
+  const url = new URL(requests[0].url);
+  assert.equal(url.searchParams.get('scope'), 'audit');
+  assert.equal(result.length, 2);
+  assert.equal(result[0].name, '@audit/dead');
+});
+
 test('search with tool filter', async () => {
   const { fetcher, requests } = createFetchStub([{ json: [] }]);
   const api = new FasterAPI({ apiUrl: 'https://api.test' }, fetcher as any);
