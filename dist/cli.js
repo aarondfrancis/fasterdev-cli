@@ -187,6 +187,7 @@ function getConfigPath() {
 
 // src/utils.ts
 import { spawn } from "child_process";
+import * as readline from "readline";
 function parsePackageSpec(input) {
   if (input.startsWith("@")) {
     const match2 = input.match(/^(@[^/]+\/[^@]+)(?:@(.+))?$/);
@@ -234,6 +235,18 @@ function openBrowser(url) {
   } catch {
     return false;
   }
+}
+async function confirm(message) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  return new Promise((resolve) => {
+    rl.question(`${message} (y/N) `, (answer) => {
+      rl.close();
+      resolve(answer.toLowerCase() === "y" || answer.toLowerCase() === "yes");
+    });
+  });
 }
 
 // src/lib/command-utils.ts
@@ -1537,8 +1550,21 @@ function registerInstallCommand(program2) {
         }
         spinner.stop();
         console.log(chalk8.bold(`
-Installing ${scopePackages.length} package(s) from @${scope}:
+Found ${scopePackages.length} package(s) in @${scope}:
 `));
+        for (const scopePkg of scopePackages) {
+          console.log(`  ${chalk8.cyan(scopePkg.name)} ${chalk8.dim(`v${scopePkg.version}`)}`);
+          console.log(`    ${chalk8.dim(scopePkg.description)}`);
+        }
+        console.log();
+        if (!options.dryRun && !json) {
+          const confirmed = await confirm("Install all packages?");
+          if (!confirmed) {
+            console.log(chalk8.yellow("\nInstallation cancelled."));
+            return;
+          }
+          console.log();
+        }
         const allResults = [];
         for (const scopePkg of scopePackages) {
           const pkgSpinner = new SpinnerManager(`Installing ${scopePkg.name}...`, json ?? false);

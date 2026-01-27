@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import * as readline from 'readline';
 import type { InstallType } from './types.js';
 
 export function parsePackageSpec(input: string): { name: string; version?: string } {
@@ -59,4 +60,21 @@ export function openBrowser(url: string): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * Prompt user for yes/no confirmation
+ */
+export async function confirm(message: string): Promise<boolean> {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) => {
+    rl.question(`${message} (y/N) `, (answer) => {
+      rl.close();
+      resolve(answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes');
+    });
+  });
 }

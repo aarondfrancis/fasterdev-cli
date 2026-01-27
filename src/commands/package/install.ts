@@ -9,7 +9,7 @@ import {
   upsertInstalledPackage,
 } from '../../registry.js';
 import type { InstallOptions, Package, ToolId } from '../../types.js';
-import { parsePackageSpec, resolveInstallType, stringifyError, getScopeFromInput } from '../../utils.js';
+import { parsePackageSpec, resolveInstallType, stringifyError, getScopeFromInput, confirm } from '../../utils.js';
 import { resolveDetectedTools } from '../shared/package-helpers.js';
 import {
   SpinnerManager,
@@ -74,7 +74,23 @@ export function registerInstallCommand(program: Command): void {
           }
 
           spinner.stop();
-          console.log(chalk.bold(`\nInstalling ${scopePackages.length} package(s) from @${scope}:\n`));
+
+          // Show packages and ask for confirmation
+          console.log(chalk.bold(`\nFound ${scopePackages.length} package(s) in @${scope}:\n`));
+          for (const scopePkg of scopePackages) {
+            console.log(`  ${chalk.cyan(scopePkg.name)} ${chalk.dim(`v${scopePkg.version}`)}`);
+            console.log(`    ${chalk.dim(scopePkg.description)}`);
+          }
+          console.log();
+
+          if (!options.dryRun && !json) {
+            const confirmed = await confirm('Install all packages?');
+            if (!confirmed) {
+              console.log(chalk.yellow('\nInstallation cancelled.'));
+              return;
+            }
+            console.log();
+          }
 
           const allResults: Array<{ pkg: Package; results: InstallResult[] }> = [];
 
