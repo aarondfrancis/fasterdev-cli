@@ -713,6 +713,368 @@ var TOOL_CONFIGS = {
       projectPath: ".agent/skills",
       globalPath: path.join(home, ".gemini", "antigravity", "skills")
     }
+  },
+  // New agents from Vercel Skills
+  windsurf: {
+    id: "windsurf",
+    name: "Windsurf",
+    detect: {
+      projectDirs: [".windsurf"],
+      globalDirs: [path.join(home, ".codeium", "windsurf")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".windsurf/rules",
+      globalPath: path.join(home, ".codeium", "windsurf", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".windsurf/skills",
+      globalPath: path.join(home, ".codeium", "windsurf", "skills")
+    }
+  },
+  "github-copilot": {
+    id: "github-copilot",
+    name: "GitHub Copilot",
+    detect: {
+      projectDirs: [".github"],
+      globalDirs: [path.join(home, ".copilot")],
+      configFiles: [".github/copilot-instructions.md"]
+    },
+    rules: {
+      projectPath: ".github/rules",
+      globalPath: path.join(home, ".copilot", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".github/skills",
+      globalPath: path.join(home, ".copilot", "skills")
+    }
+  },
+  goose: {
+    id: "goose",
+    name: "Goose",
+    detect: {
+      projectDirs: [".goose"],
+      globalDirs: [path.join(home, ".config", "goose")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".goose/rules",
+      globalPath: path.join(home, ".config", "goose", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".goose/skills",
+      globalPath: path.join(home, ".config", "goose", "skills")
+    }
+  },
+  kilo: {
+    id: "kilo",
+    name: "Kilo Code",
+    detect: {
+      projectDirs: [".kilocode"],
+      globalDirs: [path.join(home, ".kilocode")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".kilocode/rules",
+      globalPath: path.join(home, ".kilocode", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".kilocode/skills",
+      globalPath: path.join(home, ".kilocode", "skills")
+    }
+  },
+  kiro: {
+    id: "kiro",
+    name: "Kiro CLI",
+    detect: {
+      projectDirs: [".kiro"],
+      globalDirs: [path.join(home, ".kiro")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".kiro/rules",
+      globalPath: path.join(home, ".kiro", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".kiro/skills",
+      globalPath: path.join(home, ".kiro", "skills")
+    }
+  },
+  qwen: {
+    id: "qwen",
+    name: "Qwen Code",
+    detect: {
+      projectDirs: [".qwen"],
+      globalDirs: [path.join(home, ".qwen")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".qwen/rules",
+      globalPath: path.join(home, ".qwen", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".qwen/skills",
+      globalPath: path.join(home, ".qwen", "skills")
+    }
+  },
+  trae: {
+    id: "trae",
+    name: "Trae",
+    detect: {
+      projectDirs: [".trae"],
+      globalDirs: [path.join(home, ".trae")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".trae/rules",
+      globalPath: path.join(home, ".trae", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".trae/skills",
+      globalPath: path.join(home, ".trae", "skills")
+    }
+  },
+  crush: {
+    id: "crush",
+    name: "Crush",
+    detect: {
+      projectDirs: [".crush"],
+      globalDirs: [path.join(home, ".config", "crush")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".crush/rules",
+      globalPath: path.join(home, ".config", "crush", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".crush/skills",
+      globalPath: path.join(home, ".config", "crush", "skills")
+    }
+  },
+  droid: {
+    id: "droid",
+    name: "Droid",
+    detect: {
+      projectDirs: [".factory"],
+      globalDirs: [path.join(home, ".factory")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".factory/rules",
+      globalPath: path.join(home, ".factory", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".factory/skills",
+      globalPath: path.join(home, ".factory", "skills")
+    }
+  },
+  mcpjam: {
+    id: "mcpjam",
+    name: "MCPJam",
+    detect: {
+      projectDirs: [".mcpjam"],
+      globalDirs: [path.join(home, ".mcpjam")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".mcpjam/rules",
+      globalPath: path.join(home, ".mcpjam", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".mcpjam/skills",
+      globalPath: path.join(home, ".mcpjam", "skills")
+    }
+  },
+  mux: {
+    id: "mux",
+    name: "Mux",
+    detect: {
+      projectDirs: [".mux"],
+      globalDirs: [path.join(home, ".mux")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".mux/rules",
+      globalPath: path.join(home, ".mux", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".mux/skills",
+      globalPath: path.join(home, ".mux", "skills")
+    }
+  },
+  openhands: {
+    id: "openhands",
+    name: "OpenHands",
+    detect: {
+      projectDirs: [".openhands"],
+      globalDirs: [path.join(home, ".openhands")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".openhands/rules",
+      globalPath: path.join(home, ".openhands", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".openhands/skills",
+      globalPath: path.join(home, ".openhands", "skills")
+    }
+  },
+  pi: {
+    id: "pi",
+    name: "Pi",
+    detect: {
+      projectDirs: [".pi"],
+      globalDirs: [path.join(home, ".pi", "agent")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".pi/rules",
+      globalPath: path.join(home, ".pi", "agent", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".pi/skills",
+      globalPath: path.join(home, ".pi", "agent", "skills")
+    }
+  },
+  qoder: {
+    id: "qoder",
+    name: "Qoder",
+    detect: {
+      projectDirs: [".qoder"],
+      globalDirs: [path.join(home, ".qoder")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".qoder/rules",
+      globalPath: path.join(home, ".qoder", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".qoder/skills",
+      globalPath: path.join(home, ".qoder", "skills")
+    }
+  },
+  clawdbot: {
+    id: "clawdbot",
+    name: "Clawdbot",
+    detect: {
+      projectDirs: ["skills"],
+      globalDirs: [path.join(home, ".clawdbot")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: "skills",
+      globalPath: path.join(home, ".clawdbot", "skills"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: "skills",
+      globalPath: path.join(home, ".clawdbot", "skills")
+    }
+  },
+  codebuddy: {
+    id: "codebuddy",
+    name: "CodeBuddy",
+    detect: {
+      projectDirs: [".codebuddy"],
+      globalDirs: [path.join(home, ".codebuddy")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".codebuddy/rules",
+      globalPath: path.join(home, ".codebuddy", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".codebuddy/skills",
+      globalPath: path.join(home, ".codebuddy", "skills")
+    }
+  },
+  "command-code": {
+    id: "command-code",
+    name: "Command Code",
+    detect: {
+      projectDirs: [".commandcode"],
+      globalDirs: [path.join(home, ".commandcode")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".commandcode/rules",
+      globalPath: path.join(home, ".commandcode", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".commandcode/skills",
+      globalPath: path.join(home, ".commandcode", "skills")
+    }
+  },
+  zencoder: {
+    id: "zencoder",
+    name: "Zencoder",
+    detect: {
+      projectDirs: [".zencoder"],
+      globalDirs: [path.join(home, ".zencoder")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".zencoder/rules",
+      globalPath: path.join(home, ".zencoder", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".zencoder/skills",
+      globalPath: path.join(home, ".zencoder", "skills")
+    }
+  },
+  neovate: {
+    id: "neovate",
+    name: "Neovate",
+    detect: {
+      projectDirs: [".neovate"],
+      globalDirs: [path.join(home, ".neovate")],
+      configFiles: []
+    },
+    rules: {
+      projectPath: ".neovate/rules",
+      globalPath: path.join(home, ".neovate", "rules"),
+      format: "markdown",
+      fileExtension: ".md"
+    },
+    skills: {
+      projectPath: ".neovate/skills",
+      globalPath: path.join(home, ".neovate", "skills")
+    }
   }
 };
 var RULE_TOOLS = Object.keys(TOOL_CONFIGS);
@@ -720,6 +1082,8 @@ var DEFAULT_TOOL_PRIORITY = [
   "claude-code",
   "cursor",
   "codex",
+  "windsurf",
+  "github-copilot",
   "cline",
   "roo-code",
   "continue",
@@ -727,7 +1091,24 @@ var DEFAULT_TOOL_PRIORITY = [
   "gemini",
   "amp",
   "opencode",
-  "antigravity"
+  "antigravity",
+  "goose",
+  "kilo",
+  "kiro",
+  "qwen",
+  "trae",
+  "crush",
+  "droid",
+  "mcpjam",
+  "mux",
+  "openhands",
+  "pi",
+  "qoder",
+  "clawdbot",
+  "codebuddy",
+  "command-code",
+  "zencoder",
+  "neovate"
 ];
 
 // src/detector.ts
@@ -841,8 +1222,8 @@ function registerDiscoveryCommands(program2) {
 import chalk8 from "chalk";
 
 // src/installer.ts
-import fs2 from "fs/promises";
-import path3 from "path";
+import fs3 from "fs/promises";
+import path4 from "path";
 
 // src/converter.ts
 import YAML from "yaml";
@@ -943,10 +1324,18 @@ function convertToToolFormat(content, toolConfig, packageName) {
   }
 }
 
-// src/installer.ts
-import YAML2 from "yaml";
-async function ensureDir(dir) {
-  await fs2.mkdir(dir, { recursive: true });
+// src/symlinker.ts
+import fs2 from "fs/promises";
+import path3 from "path";
+import os2 from "os";
+var CANONICAL_DIR = path3.join(os2.homedir(), ".faster-dev", "packages");
+async function isSymlink(filePath) {
+  try {
+    const stats = await fs2.lstat(filePath);
+    return stats.isSymbolicLink();
+  } catch {
+    return false;
+  }
 }
 async function fileExists(p) {
   try {
@@ -956,9 +1345,106 @@ async function fileExists(p) {
     return false;
   }
 }
+async function ensureDir(dir) {
+  await fs2.mkdir(dir, { recursive: true });
+}
+async function writeCanonicalPackage(packageName, originalContent, toolConfigs) {
+  const packageDir = path3.join(CANONICAL_DIR, packageName);
+  await ensureDir(packageDir);
+  const files = /* @__PURE__ */ new Map();
+  const originalPath = path3.join(packageDir, "original.md");
+  await fs2.writeFile(originalPath, originalContent, "utf-8");
+  files.set("original.md", originalPath);
+  for (const config of toolConfigs) {
+    const ext = config.rules.fileExtension;
+    const filename = `rule-${config.id}${ext}`;
+    const converted = convertToToolFormat(originalContent, config, packageName);
+    const filePath = path3.join(packageDir, filename);
+    await fs2.writeFile(filePath, converted, "utf-8");
+    files.set(filename, filePath);
+  }
+  return { packageDir, files };
+}
+function getCanonicalFilePath(packageName, toolConfig) {
+  const ext = toolConfig.rules.fileExtension;
+  return path3.join(CANONICAL_DIR, packageName, `rule-${toolConfig.id}${ext}`);
+}
+async function createSymlink(canonicalPath, targetPath, options = {}) {
+  if (await fileExists(targetPath)) {
+    if (await isSymlink(targetPath)) {
+      const existingTarget = await fs2.readlink(targetPath);
+      if (existingTarget === canonicalPath) {
+        return;
+      }
+    }
+    if (!options.force) {
+      throw new Error(`File already exists at ${targetPath}`);
+    }
+    await fs2.unlink(targetPath);
+  }
+  await ensureDir(path3.dirname(targetPath));
+  await fs2.symlink(canonicalPath, targetPath);
+}
+async function installWithSymlink(packageName, content, toolConfig, targetDir, options = {}) {
+  await writeCanonicalPackage(packageName, content, [toolConfig]);
+  const canonicalPath = getCanonicalFilePath(packageName, toolConfig);
+  const filename = `${packageName}${toolConfig.rules.fileExtension}`;
+  const targetPath = path3.join(targetDir, filename);
+  await createSymlink(canonicalPath, targetPath, options);
+  return targetPath;
+}
+async function installWithCopy(packageName, content, toolConfig, targetDir, options = {}) {
+  const filename = `${packageName}${toolConfig.rules.fileExtension}`;
+  const targetPath = path3.join(targetDir, filename);
+  if (await fileExists(targetPath) && !options.force) {
+    throw new Error(`File already exists at ${targetPath}`);
+  }
+  const converted = convertToToolFormat(content, toolConfig, packageName);
+  await ensureDir(targetDir);
+  await fs2.writeFile(targetPath, converted, "utf-8");
+  return targetPath;
+}
+async function symlinkSupported() {
+  const testDir = path3.join(CANONICAL_DIR, ".symlink-test");
+  const testSource = path3.join(testDir, "source.txt");
+  const testLink = path3.join(testDir, "link.txt");
+  try {
+    await ensureDir(testDir);
+    await fs2.writeFile(testSource, "test", "utf-8");
+    await fs2.symlink(testSource, testLink);
+    await fs2.unlink(testLink);
+    await fs2.unlink(testSource);
+    await fs2.rmdir(testDir);
+    return true;
+  } catch (error) {
+    try {
+      await fs2.rm(testDir, { recursive: true, force: true });
+    } catch {
+    }
+    const err = error;
+    if (err.code === "EPERM" || err.code === "ENOTSUP") {
+      return false;
+    }
+    return true;
+  }
+}
+
+// src/installer.ts
+import YAML2 from "yaml";
+async function ensureDir2(dir) {
+  await fs3.mkdir(dir, { recursive: true });
+}
+async function fileExists2(p) {
+  try {
+    await fs3.access(p);
+    return true;
+  } catch {
+    return false;
+  }
+}
 async function readFile(p) {
   try {
-    return await fs2.readFile(p, "utf-8");
+    return await fs3.readFile(p, "utf-8");
   } catch {
     return null;
   }
@@ -1074,15 +1560,14 @@ async function installPackage(pkg, detectedTools, projectRoot, options) {
 async function installRule(pkg, tool, content, projectRoot, options) {
   const toolId = tool.config.id;
   const rulesConfig = tool.config.rules;
-  const basePath = options.global ? rulesConfig.globalPath : path3.join(projectRoot, rulesConfig.projectPath);
+  const basePath = options.global ? rulesConfig.globalPath : path4.join(projectRoot, rulesConfig.projectPath);
   const override = pkg.manifest.install?.[toolId];
   if (override?.action) {
     return handleSpecialAction(pkg, tool, content, projectRoot, options, override.action);
   }
-  const convertedContent = convertToToolFormat(content, tool.config, pkg.manifest.name);
   const filename = `${pkg.manifest.name}${rulesConfig.fileExtension}`;
-  const targetPath = path3.join(basePath, filename);
-  if (!options.force && await fileExists(targetPath)) {
+  const targetPath = path4.join(basePath, filename);
+  if (!options.force && await fileExists2(targetPath)) {
     return {
       tool: toolId,
       toolName: tool.config.name,
@@ -1094,6 +1579,7 @@ async function installRule(pkg, tool, content, projectRoot, options) {
     };
   }
   if (options.dryRun) {
+    const method = options.installMethod ?? "symlink";
     return {
       tool: toolId,
       toolName: tool.config.name,
@@ -1101,18 +1587,68 @@ async function installRule(pkg, tool, content, projectRoot, options) {
       path: targetPath,
       success: true,
       skipped: true,
-      skipReason: "Dry run"
+      skipReason: `Dry run (would use ${method})`
     };
   }
-  await ensureDir(basePath);
-  await fs2.writeFile(targetPath, convertedContent, "utf-8");
-  return {
-    tool: toolId,
-    toolName: tool.config.name,
-    type: "rule",
-    path: targetPath,
-    success: true
-  };
+  const useSymlink = options.installMethod !== "copy";
+  if (useSymlink) {
+    try {
+      const supported = await symlinkSupported();
+      if (!supported) {
+        return await installWithCopyMode(pkg, tool, content, basePath, options);
+      }
+      const installedPath = await installWithSymlink(
+        pkg.manifest.name,
+        content,
+        tool.config,
+        basePath,
+        { force: options.force }
+      );
+      return {
+        tool: toolId,
+        toolName: tool.config.name,
+        type: "rule",
+        path: installedPath,
+        success: true
+      };
+    } catch (error) {
+      const err = error;
+      if (err.code === "EPERM" || err.code === "ENOTSUP") {
+        return await installWithCopyMode(pkg, tool, content, basePath, options);
+      }
+      throw error;
+    }
+  } else {
+    return await installWithCopyMode(pkg, tool, content, basePath, options);
+  }
+}
+async function installWithCopyMode(pkg, tool, content, basePath, options) {
+  const toolId = tool.config.id;
+  try {
+    const installedPath = await installWithCopy(
+      pkg.manifest.name,
+      content,
+      tool.config,
+      basePath,
+      { force: options.force }
+    );
+    return {
+      tool: toolId,
+      toolName: tool.config.name,
+      type: "rule",
+      path: installedPath,
+      success: true
+    };
+  } catch (error) {
+    return {
+      tool: toolId,
+      toolName: tool.config.name,
+      type: "rule",
+      path: "",
+      success: false,
+      error: error instanceof Error ? error.message : String(error)
+    };
+  }
 }
 async function installSkill(pkg, tool, content, projectRoot, options) {
   const toolId = tool.config.id;
@@ -1128,10 +1664,10 @@ async function installSkill(pkg, tool, content, projectRoot, options) {
       skipReason: "Tool does not support skills"
     };
   }
-  const basePath = options.global ? skillsConfig.globalPath : path3.join(projectRoot, skillsConfig.projectPath);
-  const skillDir = path3.join(basePath, pkg.manifest.name);
-  const skillPath = path3.join(skillDir, "SKILL.md");
-  if (!options.force && await fileExists(skillPath)) {
+  const basePath = options.global ? skillsConfig.globalPath : path4.join(projectRoot, skillsConfig.projectPath);
+  const skillDir = path4.join(basePath, pkg.manifest.name);
+  const skillPath = path4.join(skillDir, "SKILL.md");
+  if (!options.force && await fileExists2(skillPath)) {
     return {
       tool: toolId,
       toolName: tool.config.name,
@@ -1153,13 +1689,13 @@ async function installSkill(pkg, tool, content, projectRoot, options) {
       skipReason: "Dry run"
     };
   }
-  await ensureDir(skillDir);
-  await fs2.writeFile(skillPath, content, "utf-8");
+  await ensureDir2(skillDir);
+  await fs3.writeFile(skillPath, content, "utf-8");
   for (const file of pkg.files) {
     if (file.path !== "SKILL.md" && file.path !== "rule.md" && file.path !== "manifest.json") {
-      const targetFile = path3.join(skillDir, file.path);
-      await ensureDir(path3.dirname(targetFile));
-      await fs2.writeFile(targetFile, file.content, "utf-8");
+      const targetFile = path4.join(skillDir, file.path);
+      await ensureDir2(path4.dirname(targetFile));
+      await fs3.writeFile(targetFile, file.content, "utf-8");
     }
   }
   return {
@@ -1175,7 +1711,7 @@ async function handleSpecialAction(pkg, tool, content, projectRoot, options, act
   const { body } = parseFrontmatter(content);
   switch (action) {
     case "append-to-agents-md": {
-      const agentsPath = options.global ? path3.join(tool.config.rules.globalPath, "AGENTS.md") : path3.join(projectRoot, "AGENTS.md");
+      const agentsPath = options.global ? path4.join(tool.config.rules.globalPath, "AGENTS.md") : path4.join(projectRoot, "AGENTS.md");
       if (options.dryRun) {
         return {
           tool: toolId,
@@ -1210,9 +1746,9 @@ ${body}
 [\\s\\S]*?(?=
 ## |$)`, "g");
         const updated = existing.replace(regex, "") + section;
-        await fs2.writeFile(agentsPath, updated, "utf-8");
+        await fs3.writeFile(agentsPath, updated, "utf-8");
       } else {
-        await fs2.writeFile(agentsPath, existing + section, "utf-8");
+        await fs3.writeFile(agentsPath, existing + section, "utf-8");
       }
       return {
         tool: toolId,
@@ -1223,7 +1759,7 @@ ${body}
       };
     }
     case "append-to-gemini-md": {
-      const geminiPath = options.global ? path3.join(tool.config.rules.globalPath, "GEMINI.md") : path3.join(projectRoot, "GEMINI.md");
+      const geminiPath = options.global ? path4.join(tool.config.rules.globalPath, "GEMINI.md") : path4.join(projectRoot, "GEMINI.md");
       if (options.dryRun) {
         return {
           tool: toolId,
@@ -1252,7 +1788,7 @@ ${body}
           skipReason: "Section already exists in GEMINI.md"
         };
       }
-      await fs2.writeFile(geminiPath, existing + section, "utf-8");
+      await fs3.writeFile(geminiPath, existing + section, "utf-8");
       return {
         tool: toolId,
         toolName: tool.config.name,
@@ -1262,8 +1798,8 @@ ${body}
       };
     }
     case "add-to-read-config": {
-      const rulePath = path3.join(projectRoot, `${pkg.manifest.name}.md`);
-      const configPath = path3.join(projectRoot, ".aider.conf.yml");
+      const rulePath = path4.join(projectRoot, `${pkg.manifest.name}.md`);
+      const configPath = path4.join(projectRoot, ".aider.conf.yml");
       if (options.dryRun) {
         return {
           tool: toolId,
@@ -1275,7 +1811,7 @@ ${body}
           skipReason: "Dry run - would create file and update .aider.conf.yml"
         };
       }
-      await fs2.writeFile(rulePath, body, "utf-8");
+      await fs3.writeFile(rulePath, body, "utf-8");
       const existingConfig = await readFile(configPath);
       let config = {};
       if (existingConfig) {
@@ -1297,7 +1833,7 @@ ${body}
       } else {
         config.read = fileName;
       }
-      await fs2.writeFile(configPath, YAML2.stringify(config), "utf-8");
+      await fs3.writeFile(configPath, YAML2.stringify(config), "utf-8");
       return {
         tool: toolId,
         toolName: tool.config.name,
@@ -1307,9 +1843,9 @@ ${body}
       };
     }
     case "add-with-gemini-import": {
-      const rulesDir = options.global ? tool.config.rules.globalPath : path3.join(projectRoot, ".gemini", "rules");
-      const rulePath = path3.join(rulesDir, `${pkg.manifest.name}.md`);
-      const geminiMdPath = options.global ? path3.join(path3.dirname(tool.config.rules.globalPath), "GEMINI.md") : path3.join(projectRoot, "GEMINI.md");
+      const rulesDir = options.global ? tool.config.rules.globalPath : path4.join(projectRoot, ".gemini", "rules");
+      const rulePath = path4.join(rulesDir, `${pkg.manifest.name}.md`);
+      const geminiMdPath = options.global ? path4.join(path4.dirname(tool.config.rules.globalPath), "GEMINI.md") : path4.join(projectRoot, "GEMINI.md");
       if (options.dryRun) {
         return {
           tool: toolId,
@@ -1321,7 +1857,7 @@ ${body}
           skipReason: "Dry run - would create rule file and add @import to GEMINI.md"
         };
       }
-      if (!options.force && await fileExists(rulePath)) {
+      if (!options.force && await fileExists2(rulePath)) {
         return {
           tool: toolId,
           toolName: tool.config.name,
@@ -1332,13 +1868,13 @@ ${body}
           skipReason: "File already exists (use --force to overwrite)"
         };
       }
-      await ensureDir(rulesDir);
-      await fs2.writeFile(rulePath, body, "utf-8");
+      await ensureDir2(rulesDir);
+      await fs3.writeFile(rulePath, body, "utf-8");
       const existingGemini = await readFile(geminiMdPath) || "";
       const importLine = `@rules/${pkg.manifest.name}.md`;
       if (!existingGemini.includes(importLine)) {
         const newContent = existingGemini.trim() ? existingGemini.trimEnd() + "\n" + importLine + "\n" : importLine + "\n";
-        await fs2.writeFile(geminiMdPath, newContent, "utf-8");
+        await fs3.writeFile(geminiMdPath, newContent, "utf-8");
       }
       return {
         tool: toolId,
@@ -1364,12 +1900,12 @@ async function uninstallPackage(packageName, detectedTools, projectRoot, options
   for (const tool of detectedTools) {
     const toolId = tool.config.id;
     const rulesConfig = tool.config.rules;
-    const ruleBasePath = options.global ? rulesConfig.globalPath : path3.join(projectRoot, rulesConfig.projectPath);
+    const ruleBasePath = options.global ? rulesConfig.globalPath : path4.join(projectRoot, rulesConfig.projectPath);
     const ruleFilename = `${packageName}${rulesConfig.fileExtension}`;
-    const rulePath = path3.join(ruleBasePath, ruleFilename);
-    if (await fileExists(rulePath)) {
+    const rulePath = path4.join(ruleBasePath, ruleFilename);
+    if (await fileExists2(rulePath)) {
       if (!options.dryRun) {
-        await fs2.unlink(rulePath);
+        await fs3.unlink(rulePath);
       }
       results.push({
         tool: toolId,
@@ -1382,11 +1918,11 @@ async function uninstallPackage(packageName, detectedTools, projectRoot, options
       });
     }
     if (tool.config.skills) {
-      const skillBasePath = options.global ? tool.config.skills.globalPath : path3.join(projectRoot, tool.config.skills.projectPath);
-      const skillDir = path3.join(skillBasePath, packageName);
-      if (await fileExists(skillDir)) {
+      const skillBasePath = options.global ? tool.config.skills.globalPath : path4.join(projectRoot, tool.config.skills.projectPath);
+      const skillDir = path4.join(skillBasePath, packageName);
+      if (await fileExists2(skillDir)) {
         if (!options.dryRun) {
-          await fs2.rm(skillDir, { recursive: true });
+          await fs3.rm(skillDir, { recursive: true });
         }
         results.push({
           tool: toolId,
@@ -1409,9 +1945,9 @@ async function listInstalled(detectedTools, projectRoot, options) {
     const rulesConfig = tool.config.rules;
     const rules = [];
     const skills = [];
-    const ruleBasePath = options.global ? rulesConfig.globalPath : path3.join(projectRoot, rulesConfig.projectPath);
+    const ruleBasePath = options.global ? rulesConfig.globalPath : path4.join(projectRoot, rulesConfig.projectPath);
     try {
-      const files = await fs2.readdir(ruleBasePath);
+      const files = await fs3.readdir(ruleBasePath);
       for (const file of files) {
         if (file.endsWith(rulesConfig.fileExtension)) {
           rules.push(file.replace(rulesConfig.fileExtension, ""));
@@ -1420,12 +1956,12 @@ async function listInstalled(detectedTools, projectRoot, options) {
     } catch {
     }
     if (tool.config.skills) {
-      const skillBasePath = options.global ? tool.config.skills.globalPath : path3.join(projectRoot, tool.config.skills.projectPath);
+      const skillBasePath = options.global ? tool.config.skills.globalPath : path4.join(projectRoot, tool.config.skills.projectPath);
       try {
-        const dirs = await fs2.readdir(skillBasePath);
+        const dirs = await fs3.readdir(skillBasePath);
         for (const dir of dirs) {
-          const skillPath = path3.join(skillBasePath, dir, "SKILL.md");
-          if (await fileExists(skillPath)) {
+          const skillPath = path4.join(skillBasePath, dir, "SKILL.md");
+          if (await fileExists2(skillPath)) {
             skills.push(dir);
           }
         }
@@ -1440,9 +1976,9 @@ async function listInstalled(detectedTools, projectRoot, options) {
 }
 
 // src/registry.ts
-import fs3 from "fs/promises";
-import path4 from "path";
-import os2 from "os";
+import fs4 from "fs/promises";
+import path5 from "path";
+import os3 from "os";
 var SCHEMA_VERSION = 1;
 function emptyRegistry() {
   return { schemaVersion: SCHEMA_VERSION, packages: {} };
@@ -1452,17 +1988,17 @@ function registryKey(name, installType) {
 }
 function getRegistryPath(projectRoot, global) {
   if (global) {
-    return path4.join(os2.homedir(), ".faster", "installed.json");
+    return path5.join(os3.homedir(), ".faster", "installed.json");
   }
-  return path4.join(projectRoot, ".faster", "installed.json");
+  return path5.join(projectRoot, ".faster", "installed.json");
 }
-async function ensureDir2(dir) {
-  await fs3.mkdir(dir, { recursive: true });
+async function ensureDir3(dir) {
+  await fs4.mkdir(dir, { recursive: true });
 }
 async function readRegistry(projectRoot, global) {
   const registryPath = getRegistryPath(projectRoot, global);
   try {
-    const raw = await fs3.readFile(registryPath, "utf-8");
+    const raw = await fs4.readFile(registryPath, "utf-8");
     const parsed = JSON.parse(raw);
     if (!parsed || parsed.schemaVersion !== SCHEMA_VERSION || typeof parsed.packages !== "object") {
       return emptyRegistry();
@@ -1474,8 +2010,8 @@ async function readRegistry(projectRoot, global) {
 }
 async function writeRegistry(projectRoot, global, registry) {
   const registryPath = getRegistryPath(projectRoot, global);
-  await ensureDir2(path4.dirname(registryPath));
-  await fs3.writeFile(registryPath, JSON.stringify(registry, null, 2), "utf-8");
+  await ensureDir3(path5.dirname(registryPath));
+  await fs4.writeFile(registryPath, JSON.stringify(registry, null, 2), "utf-8");
 }
 function upsertInstalledPackage(registry, record) {
   registry.packages[registryKey(record.name, record.installType)] = record;
@@ -1493,13 +2029,13 @@ function listInstalledPackages(registry) {
 }
 
 // src/commands/shared/package-helpers.ts
-import path5 from "path";
+import path6 from "path";
 async function resolveDetectedTools(projectRoot, options, defaultTools) {
   let detectedTools = await detectTools(projectRoot);
   if (detectedTools.length === 0) {
     detectedTools = Object.values(TOOL_CONFIGS).map((config) => ({
       config,
-      projectPath: path5.join(projectRoot, config.rules.projectPath),
+      projectPath: path6.join(projectRoot, config.rules.projectPath),
       globalPath: config.rules.globalPath
     }));
   }
@@ -1520,10 +2056,10 @@ async function resolveDetectedTools(projectRoot, options, defaultTools) {
 }
 
 // src/commands/package/install.ts
-import fs4 from "fs/promises";
-import path6 from "path";
+import fs5 from "fs/promises";
+import path7 from "path";
 function registerInstallCommand(program2) {
-  program2.command("install <package>").alias("add").description("Install a skill or rule from faster.dev").option("-g, --global", "Install globally instead of to project").option("-t, --tools <tools>", "Comma-separated list of tools to install to").option("--as-skill", "Install as a skill (where supported)").option("-f, --force", "Overwrite existing installations").option("--dry-run", "Show what would be installed without making changes").option("--from-file <path>", "Install from a local package directory").action(async (packageInput, opts) => {
+  program2.command("install <package>").alias("add").description("Install a skill or rule from faster.dev").option("-g, --global", "Install globally instead of to project").option("-t, --tools <tools>", "Comma-separated list of tools to install to").option("--as-skill", "Install as a skill (where supported)").option("-f, --force", "Overwrite existing installations").option("--dry-run", "Show what would be installed without making changes").option("--from-file <path>", "Install from a local package directory").option("--copy", "Install as copies instead of symlinks").action(async (packageInput, opts) => {
     const { json, verbose } = program2.opts();
     const projectRoot = process.cwd();
     const options = {
@@ -1531,7 +2067,8 @@ function registerInstallCommand(program2) {
       tools: opts.tools ? opts.tools.split(",") : void 0,
       asSkill: opts.asSkill ?? false,
       force: opts.force ?? false,
-      dryRun: opts.dryRun ?? false
+      dryRun: opts.dryRun ?? false,
+      installMethod: opts.copy ? "copy" : "symlink"
     };
     const defaultTools = getDefaultTools();
     const spinner = new SpinnerManager("Detecting tools...", json ?? false);
@@ -1694,25 +2231,25 @@ function printInstallResults(pkg, results) {
 }
 async function loadLocalPackage(dir) {
   const files = [];
-  const manifestPath = path6.join(dir, "manifest.json");
-  const manifestContent = await fs4.readFile(manifestPath, "utf-8");
+  const manifestPath = path7.join(dir, "manifest.json");
+  const manifestContent = await fs5.readFile(manifestPath, "utf-8");
   files.push({ path: "manifest.json", content: manifestContent });
   const manifest = JSON.parse(manifestContent);
-  const entries = await fs4.readdir(dir, { withFileTypes: true });
+  const entries = await fs5.readdir(dir, { withFileTypes: true });
   for (const entry of entries) {
     if (entry.isFile() && entry.name !== "manifest.json") {
       if (entry.name.endsWith(".md") || entry.name.endsWith(".mdc") || entry.name.endsWith(".txt")) {
-        const content = await fs4.readFile(path6.join(dir, entry.name), "utf-8");
+        const content = await fs5.readFile(path7.join(dir, entry.name), "utf-8");
         files.push({ path: entry.name, content });
       }
     }
   }
-  const assetsDir = path6.join(dir, "assets");
+  const assetsDir = path7.join(dir, "assets");
   try {
-    const assetEntries = await fs4.readdir(assetsDir, { withFileTypes: true });
+    const assetEntries = await fs5.readdir(assetsDir, { withFileTypes: true });
     for (const entry of assetEntries) {
       if (entry.isFile()) {
-        const content = await fs4.readFile(path6.join(assetsDir, entry.name), "utf-8");
+        const content = await fs5.readFile(path7.join(assetsDir, entry.name), "utf-8");
         files.push({ path: `assets/${entry.name}`, content });
       }
     }

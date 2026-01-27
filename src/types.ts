@@ -10,7 +10,27 @@ export type ToolId =
   | 'gemini'
   | 'amp'
   | 'opencode'
-  | 'antigravity';
+  | 'antigravity'
+  // New agents
+  | 'windsurf'
+  | 'github-copilot'
+  | 'goose'
+  | 'kilo'
+  | 'kiro'
+  | 'qwen'
+  | 'trae'
+  | 'crush'
+  | 'droid'
+  | 'mcpjam'
+  | 'mux'
+  | 'openhands'
+  | 'pi'
+  | 'qoder'
+  | 'clawdbot'
+  | 'codebuddy'
+  | 'command-code'
+  | 'zencoder'
+  | 'neovate';
 
 // Package types
 export type PackageType = 'rule' | 'skill' | 'both';
@@ -82,6 +102,9 @@ export interface DetectedTool {
   globalPath: string | null; // Global config dir if exists
 }
 
+// Installation method
+export type InstallMethod = 'symlink' | 'copy';
+
 // Installation options
 export interface InstallOptions {
   global: boolean;
@@ -89,6 +112,7 @@ export interface InstallOptions {
   asSkill?: boolean; // Install as skill instead of rule
   force?: boolean; // Overwrite existing
   dryRun?: boolean; // Just show what would happen
+  installMethod?: InstallMethod; // Symlink (default) or copy
 }
 
 // CLI config stored in ~/.faster-dev/config.json

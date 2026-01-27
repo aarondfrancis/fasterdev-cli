@@ -2,6 +2,12 @@ import fs from 'fs/promises';
 import path from 'path';
 import type { DetectedTool, Package, InstallOptions, ToolId } from './types.js';
 import { convertToToolFormat, toAiderConfigEntry, parseFrontmatter } from './converter.js';
+import {
+  installWithSymlink,
+  installWithCopy,
+  symlinkSupported,
+  writeCanonicalPackage,
+} from './symlinker.js';
 import YAML from 'yaml';
 
 export interface InstallResult {
@@ -202,9 +208,6 @@ async function installRule(
     return handleSpecialAction(pkg, tool, content, projectRoot, options, override.action);
   }
 
-  // Convert content to tool's format
-  const convertedContent = convertToToolFormat(content, tool.config, pkg.manifest.name);
-
   // Determine filename
   const filename = `${pkg.manifest.name}${rulesConfig.fileExtension}`;
   const targetPath = path.join(basePath, filename);
@@ -223,6 +226,7 @@ async function installRule(
   }
 
   if (options.dryRun) {
+    const method = options.installMethod ?? 'symlink';
     return {
       tool: toolId,
       toolName: tool.config.name,
@@ -230,21 +234,90 @@ async function installRule(
       path: targetPath,
       success: true,
       skipped: true,
-      skipReason: 'Dry run',
+      skipReason: `Dry run (would use ${method})`,
     };
   }
 
-  // Write file
-  await ensureDir(basePath);
-  await fs.writeFile(targetPath, convertedContent, 'utf-8');
+  // Determine install method (default to symlink)
+  const useSymlink = options.installMethod !== 'copy';
 
-  return {
-    tool: toolId,
-    toolName: tool.config.name,
-    type: 'rule',
-    path: targetPath,
-    success: true,
-  };
+  if (useSymlink) {
+    // Try symlink installation
+    try {
+      // Check if symlinks are supported
+      const supported = await symlinkSupported();
+      if (!supported) {
+        // Fall back to copy mode
+        return await installWithCopyMode(pkg, tool, content, basePath, options);
+      }
+
+      const installedPath = await installWithSymlink(
+        pkg.manifest.name,
+        content,
+        tool.config,
+        basePath,
+        { force: options.force }
+      );
+
+      return {
+        tool: toolId,
+        toolName: tool.config.name,
+        type: 'rule',
+        path: installedPath,
+        success: true,
+      };
+    } catch (error: unknown) {
+      const err = error as NodeJS.ErrnoException;
+      // If symlink fails due to permissions/support, fall back to copy
+      if (err.code === 'EPERM' || err.code === 'ENOTSUP') {
+        return await installWithCopyMode(pkg, tool, content, basePath, options);
+      }
+      throw error;
+    }
+  } else {
+    // Explicit copy mode
+    return await installWithCopyMode(pkg, tool, content, basePath, options);
+  }
+}
+
+/**
+ * Install using copy mode (fallback or explicit)
+ */
+async function installWithCopyMode(
+  pkg: Package,
+  tool: DetectedTool,
+  content: string,
+  basePath: string,
+  options: InstallOptions
+): Promise<InstallResult> {
+  const toolId = tool.config.id;
+
+  try {
+    const installedPath = await installWithCopy(
+      pkg.manifest.name,
+      content,
+      tool.config,
+      basePath,
+      { force: options.force }
+    );
+
+    return {
+      tool: toolId,
+      toolName: tool.config.name,
+      type: 'rule',
+      path: installedPath,
+      success: true,
+    };
+  } catch (error) {
+    return {
+      tool: toolId,
+      toolName: tool.config.name,
+      type: 'rule',
+      path: '',
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
 }
 
 /**

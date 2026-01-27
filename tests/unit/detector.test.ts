@@ -209,6 +209,71 @@ test('detects Antigravity via .agent directory', async () => {
   assert.ok(result?.projectPath);
 });
 
+// --- New agents detection tests ---
+
+test('detects Windsurf via .windsurf directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, '.windsurf'), { recursive: true });
+  const result = await detectTool('windsurf', root);
+  assert.ok(result?.projectPath);
+});
+
+test('detects GitHub Copilot via .github directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, '.github'), { recursive: true });
+  const result = await detectTool('github-copilot', root);
+  assert.ok(result?.projectPath);
+});
+
+test('detects Goose via .goose directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, '.goose'), { recursive: true });
+  const result = await detectTool('goose', root);
+  assert.ok(result?.projectPath);
+});
+
+test('detects Kilo Code via .kilocode directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, '.kilocode'), { recursive: true });
+  const result = await detectTool('kilo', root);
+  assert.ok(result?.projectPath);
+});
+
+test('detects Trae via .trae directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, '.trae'), { recursive: true });
+  const result = await detectTool('trae', root);
+  assert.ok(result?.projectPath);
+});
+
+test('detects Droid via .factory directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, '.factory'), { recursive: true });
+  const result = await detectTool('droid', root);
+  assert.ok(result?.projectPath);
+});
+
+test('detects OpenHands via .openhands directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, '.openhands'), { recursive: true });
+  const result = await detectTool('openhands', root);
+  assert.ok(result?.projectPath);
+});
+
+test('detects Zencoder via .zencoder directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, '.zencoder'), { recursive: true });
+  const result = await detectTool('zencoder', root);
+  assert.ok(result?.projectPath);
+});
+
+test('detects Clawdbot via skills directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'faster-detector-'));
+  await fs.mkdir(path.join(root, 'skills'), { recursive: true });
+  const result = await detectTool('clawdbot', root);
+  assert.ok(result?.projectPath);
+});
+
 // --- Skills support detection ---
 test('getSkillTools filters to only skill-capable tools', () => {
   const allTools = [

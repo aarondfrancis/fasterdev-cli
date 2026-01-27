@@ -684,3 +684,148 @@ test('listInstalled works for all tools with content', async () => {
   const roo = installed.get('roo-code');
   assert.ok(roo?.rules.includes('list-test-2'));
 });
+
+// --- Install method tests (symlink vs copy) ---
+
+test('default install uses symlinks', async () => {
+  const root = await tempProject();
+  const pkg = makeSimpleRulePackage('symlink-default', ['claude-code']);
+  const results = await installPackage(pkg, [tool('claude-code', root)], root, { global: false });
+
+  assert.equal(results[0].success, true);
+  const target = path.join(root, '.claude', 'rules', 'symlink-default.md');
+  const stats = await fs.lstat(target);
+  assert.equal(stats.isSymbolicLink(), true);
+});
+
+test('installMethod copy creates regular files', async () => {
+  const root = await tempProject();
+  const pkg = makeSimpleRulePackage('copy-explicit', ['claude-code']);
+  const results = await installPackage(pkg, [tool('claude-code', root)], root, {
+    global: false,
+    installMethod: 'copy',
+  });
+
+  assert.equal(results[0].success, true);
+  const target = path.join(root, '.claude', 'rules', 'copy-explicit.md');
+  const stats = await fs.lstat(target);
+  assert.equal(stats.isSymbolicLink(), false);
+});
+
+test('symlink and copy produce identical content', async () => {
+  const root1 = await tempProject();
+  const root2 = await tempProject();
+  const pkg1 = makeSimpleRulePackage('content-compare', ['claude-code']);
+  const pkg2 = makeSimpleRulePackage('content-compare', ['claude-code']);
+
+  await installPackage(pkg1, [tool('claude-code', root1)], root1, {
+    global: false,
+    installMethod: 'symlink',
+  });
+
+  await installPackage(pkg2, [tool('claude-code', root2)], root2, {
+    global: false,
+    installMethod: 'copy',
+  });
+
+  const symlinkContent = await fs.readFile(
+    path.join(root1, '.claude', 'rules', 'content-compare.md'),
+    'utf-8'
+  );
+  const copyContent = await fs.readFile(
+    path.join(root2, '.claude', 'rules', 'content-compare.md'),
+    'utf-8'
+  );
+
+  assert.equal(symlinkContent, copyContent);
+});
+
+test('dry-run shows install method', async () => {
+  const root = await tempProject();
+  const pkg = makeSimpleRulePackage('dry-method', ['claude-code']);
+
+  const symlinkResults = await installPackage(pkg, [tool('claude-code', root)], root, {
+    global: false,
+    dryRun: true,
+    installMethod: 'symlink',
+  });
+
+  const copyResults = await installPackage(pkg, [tool('claude-code', root)], root, {
+    global: false,
+    dryRun: true,
+    installMethod: 'copy',
+  });
+
+  assert.ok(symlinkResults[0].skipReason?.includes('symlink'));
+  assert.ok(copyResults[0].skipReason?.includes('copy'));
+});
+
+test('uninstall removes symlink but canonical file persists', async () => {
+  const root = await tempProject();
+  const pkg = makeSimpleRulePackage('symlink-uninstall', ['claude-code']);
+
+  // Install with symlink
+  await installPackage(pkg, [tool('claude-code', root)], root, {
+    global: false,
+    installMethod: 'symlink',
+  });
+
+  const symlinkPath = path.join(root, '.claude', 'rules', 'symlink-uninstall.md');
+
+  // Verify symlink exists and get canonical path
+  const stats = await fs.lstat(symlinkPath);
+  assert.equal(stats.isSymbolicLink(), true);
+  const canonicalPath = await fs.readlink(symlinkPath);
+
+  // Uninstall
+  await uninstallPackage('symlink-uninstall', [tool('claude-code', root)], root, { global: false });
+
+  // Symlink should be removed
+  await assert.rejects(fs.access(symlinkPath));
+
+  // Canonical file should still exist (for other potential users)
+  await fs.access(canonicalPath);
+});
+
+test('multi-tool install shares canonical package', async () => {
+  const root = await tempProject();
+  const pkg = makeSimpleRulePackage('shared-canonical', ['claude-code', 'cline']);
+
+  await installPackage(pkg, [tool('claude-code', root), tool('cline', root)], root, {
+    global: false,
+    installMethod: 'symlink',
+  });
+
+  const claudePath = path.join(root, '.claude', 'rules', 'shared-canonical.md');
+  const clinePath = path.join(root, '.clinerules', 'shared-canonical.md');
+
+  // Both should be symlinks
+  const claudeStats = await fs.lstat(claudePath);
+  const clineStats = await fs.lstat(clinePath);
+  assert.equal(claudeStats.isSymbolicLink(), true);
+  assert.equal(clineStats.isSymbolicLink(), true);
+
+  // Both should point to the same canonical package directory
+  const claudeTarget = await fs.readlink(claudePath);
+  const clineTarget = await fs.readlink(clinePath);
+
+  // Same package directory, different tool-specific files
+  const claudeDir = path.dirname(claudeTarget);
+  const clineDir = path.dirname(clineTarget);
+  assert.equal(claudeDir, clineDir);
+});
+
+test('listInstalled works with symlinked files', async () => {
+  const root = await tempProject();
+  const pkg = makeSimpleRulePackage('list-symlink', ['claude-code']);
+
+  await installPackage(pkg, [tool('claude-code', root)], root, {
+    global: false,
+    installMethod: 'symlink',
+  });
+
+  const installed = await listInstalled([tool('claude-code', root)], root, { global: false });
+  const claude = installed.get('claude-code');
+
+  assert.ok(claude?.rules.includes('list-symlink'));
+});

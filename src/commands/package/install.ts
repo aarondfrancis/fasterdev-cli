@@ -27,6 +27,7 @@ interface InstallCommandOptions {
   force?: boolean;
   dryRun?: boolean;
   fromFile?: string;
+  copy?: boolean;
 }
 
 export function registerInstallCommand(program: Command): void {
@@ -40,6 +41,7 @@ export function registerInstallCommand(program: Command): void {
     .option('-f, --force', 'Overwrite existing installations')
     .option('--dry-run', 'Show what would be installed without making changes')
     .option('--from-file <path>', 'Install from a local package directory')
+    .option('--copy', 'Install as copies instead of symlinks')
     .action(async (packageInput: string, opts: InstallCommandOptions) => {
       const { json, verbose } = program.opts<GlobalOptions>();
       const projectRoot = process.cwd();
@@ -50,6 +52,7 @@ export function registerInstallCommand(program: Command): void {
         asSkill: opts.asSkill ?? false,
         force: opts.force ?? false,
         dryRun: opts.dryRun ?? false,
+        installMethod: opts.copy ? 'copy' : 'symlink',
       };
 
       const defaultTools = getDefaultTools();
