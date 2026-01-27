@@ -41,6 +41,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Update package.json version
+        run: |
+          VERSION="${{ inputs.version }}"
+          npm version "$VERSION" --no-git-tag-version
+
       - name: Create and push tag
         run: |
           VERSION="${{ inputs.version }}"
@@ -52,11 +57,11 @@ jobs:
           VERSION="${{ inputs.version }}"
           .github/scripts/parse-changelog.sh release "$VERSION"
 
-      - name: Commit and push changelog
+      - name: Commit and push changes
         run: |
           VERSION="${{ inputs.version }}"
-          git add CHANGELOG.md
-          git commit -m "Update changelog for v$VERSION"
+          git add CHANGELOG.md package.json package-lock.json
+          git commit -m "Release v$VERSION"
           git push
 
   publish:
