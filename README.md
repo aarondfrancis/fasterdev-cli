@@ -8,6 +8,12 @@ Install AI coding assistant skills and rules from faster.dev to Claude Code, Cur
 npm install -g fasterdev
 ```
 
+Or run directly with npx:
+
+```bash
+npx fasterdev install api-conventions
+```
+
 ## Quick Start
 
 ```bash
