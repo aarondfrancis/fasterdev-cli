@@ -24,7 +24,7 @@ export function registerWhoamiCommand(program: Command): void {
           outputJson({ authenticated: false });
         } else {
           console.log(chalk.yellow('Not logged in'));
-          console.log(chalk.dim('Run `faster login` to authenticate'));
+          console.log(chalk.dim('Run `fasterdev login` to authenticate'));
         }
         setExitCode(EXIT_CODES.AUTH_REQUIRED);
         return;
