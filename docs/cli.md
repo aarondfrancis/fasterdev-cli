@@ -55,11 +55,14 @@ fasterdev install <package> [options]
 | `-f, --force` | Overwrite existing installations |
 | `--dry-run` | Show what would be installed |
 | `--from-file <path>` | Install from local directory |
+| `--copy` | Install as copies instead of symlinks |
+
+By default, packages are installed as symlinks to `~/.faster-dev/packages/` for efficient storage and easy updates. Use `--copy` if you need regular files.
 
 **Examples:**
 
 ```bash
-# Basic install
+# Basic install (uses symlinks)
 fasterdev install api-conventions
 
 # Install to specific tools
@@ -73,6 +76,9 @@ fasterdev install docx-generator --as-skill
 
 # Preview changes
 fasterdev install api-conventions --dry-run
+
+# Install as copies instead of symlinks
+fasterdev install api-conventions --copy
 ```
 
 ### `fasterdev remove`

@@ -1,6 +1,6 @@
 # fasterdev
 
-Install AI coding assistant skills and rules from faster.dev to Claude Code, Cursor, Codex, Cline, Roo Code, Continue, Aider, Gemini CLI, Amp, OpenCode, and Antigravity — all with a single command.
+Install AI coding assistant skills and rules from faster.dev to 30 AI coding tools — including Claude Code, Cursor, Codex, Windsurf, GitHub Copilot, Cline, and more — all with a single command.
 
 ## Installation
 
@@ -35,19 +35,24 @@ fasterdev install api-conventions --global
 
 ## Supported Tools
 
+fasterdev supports **30 AI coding assistants**. Here are the most popular:
+
 | Tool | Rules | Skills | Format |
 |------|-------|--------|--------|
-| Claude Code | Yes | Yes | `.claude/rules/*.md`, `.claude/skills/*/SKILL.md` |
-| OpenAI Codex | Yes | Yes | `AGENTS.md`, `.codex/skills/*/SKILL.md` |
-| Cursor | Yes | No | `.cursor/rules/*.mdc` |
+| Claude Code | Yes | Yes | `.claude/rules/*.md` |
+| Cursor | Yes | Yes | `.cursor/rules/*.mdc` |
+| OpenAI Codex | Yes | Yes | `.codex/rules/*.md` |
+| Windsurf | Yes | Yes | `.windsurf/rules/*.md` |
+| GitHub Copilot | Yes | Yes | `.github/rules/*.md` |
 | Cline | Yes | No | `.clinerules/*.md` |
 | Roo Code | Yes | No | `.roo/rules/*.md` |
 | Continue.dev | Yes | No | `.continue/rules/*.md` |
-| Aider | Yes | No | `CONVENTIONS.md` + `.aider.conf.yml` |
-| Gemini CLI | Yes | No | `GEMINI.md` |
-| Amp | Yes | Yes | `AGENTS.md`, `.agents/skills/*/SKILL.md` |
-| OpenCode | Yes | Yes | `.opencode/rules/*.md`, `.opencode/skill/*/SKILL.md` |
-| Antigravity | Yes | Yes | `.agent/rules/*.md`, `.agent/skills/*/SKILL.md` |
+| Aider | Yes | No | `.aider/*.md` |
+| Gemini CLI | Yes | No | `.gemini/rules/*.md` |
+
+Plus 20 more: Amp, OpenCode, Antigravity, Goose, Kilo Code, Kiro, Qwen Code, Trae, Crush, Droid, MCPJam, Mux, OpenHands, Pi, Qoder, Clawdbot, CodeBuddy, Command Code, Zencoder, and Neovate.
+
+See [Supported Tools](./docs/supported-tools.md) for the full list.
 
 ## Commands
 
@@ -82,6 +87,7 @@ fasterdev install . --from-file ./my-package
 #   --as-skill       Install as a skill (where supported)
 #   -f, --force      Overwrite existing installations
 #   --dry-run        Show what would be installed without making changes
+#   --copy           Install as copies instead of symlinks
 ```
 
 ### Removing Packages

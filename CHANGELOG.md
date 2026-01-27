@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Support for 19 new AI coding tools: Windsurf, GitHub Copilot, Goose, Kilo Code, Kiro CLI, Qwen Code, Trae, Crush, Droid, MCPJam, Mux, OpenHands, Pi, Qoder, Clawdbot, CodeBuddy, Command Code, Zencoder, and Neovate
+- Symlink-based installation (default) for efficient storage and easy updates
+- `--copy` flag for traditional file-based installation
+- Canonical package storage in `~/.faster-dev/packages/`
+
+### Changed
+- Installation now uses symlinks by default instead of copying files
+- All 30 supported tools now have skills support
+
 ## [0.1.7] - 2026-01-27
 
 
