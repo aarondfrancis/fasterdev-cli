@@ -46,12 +46,6 @@ jobs:
           VERSION="${{ inputs.version }}"
           npm version "$VERSION" --no-git-tag-version
 
-      - name: Create and push tag
-        run: |
-          VERSION="${{ inputs.version }}"
-          git tag "v$VERSION"
-          git push origin "v$VERSION"
-
       - name: Update changelog
         run: |
           VERSION="${{ inputs.version }}"
@@ -61,8 +55,14 @@ jobs:
         run: |
           VERSION="${{ inputs.version }}"
           git add CHANGELOG.md package.json package-lock.json
-          git commit -m "Release v$VERSION"
+          git commit -m "Release v$VERSION" || echo "No changes to commit"
           git push
+
+      - name: Create and push tag
+        run: |
+          VERSION="${{ inputs.version }}"
+          git tag "v$VERSION"
+          git push origin "v$VERSION"
 
   publish:
     needs: release
