@@ -36,7 +36,7 @@ check_changelog_exists() {
     fi
 }
 
-# Validate that [Unreleased] section exists and has content
+# Validate that [Unreleased] section exists (content is optional)
 validate() {
     check_changelog_exists
 
@@ -57,10 +57,10 @@ validate() {
     trimmed=$(echo "$unreleased_content" | grep -v '^[[:space:]]*$' | grep -v '^###' || true)
 
     if [[ -z "$trimmed" ]]; then
-        error "No changes found in [Unreleased] section. Add changelog entries before releasing."
+        warn "No changes found in [Unreleased] section. Release will have no changelog entries."
+    else
+        success "Changelog validation passed. Found unreleased changes."
     fi
-
-    success "Changelog validation passed. Found unreleased changes."
 }
 
 # Move unreleased content to a new version section
