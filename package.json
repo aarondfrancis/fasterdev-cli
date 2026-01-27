@@ -1,6 +1,6 @@
 {
   "name": "fasterdev",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Install AI coding assistant skills and rules from faster.dev",
   "type": "module",
   "bin": {
