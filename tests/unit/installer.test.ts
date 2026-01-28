@@ -875,3 +875,54 @@ test('skill name is not double-prefixed if already has fd-', async () => {
 
   assert.equal(frontmatter.name, 'fd-already-prefixed');
 });
+
+test('skill without name field is installed unchanged', async () => {
+  const root = await tempProject();
+  const pkg: Package = {
+    manifest: {
+      name: 'nameless-skill',
+      version: '1.0.0',
+      type: 'skill',
+      description: 'Skill without name in frontmatter',
+      compatibility: { skills: ['claude-code'] },
+    },
+    files: [
+      { path: 'manifest.json', content: '{}' },
+      { path: 'SKILL.md', content: '---\ndescription: No name field\n---\n\n# Content' },
+    ],
+  };
+
+  await installPackage(pkg, [tool('claude-code', root)], root, {
+    global: false,
+    asSkill: true,
+  });
+
+  const skillPath = path.join(root, '.claude', 'skills', 'nameless-skill', 'SKILL.md');
+  const content = await fs.readFile(skillPath, 'utf-8');
+  const { frontmatter } = parseFrontmatter(content);
+
+  // Should not have a name field added
+  assert.equal(frontmatter.name, undefined);
+});
+
+test('skill name prefix works across multiple tools', async () => {
+  const root = await tempProject();
+  const pkg = makeSimpleSkillPackage('multi-tool-skill', ['claude-code', 'cursor']);
+
+  await installPackage(pkg, [tool('claude-code', root), tool('cursor', root)], root, {
+    global: false,
+    asSkill: true,
+  });
+
+  // Check Claude Code
+  const claudePath = path.join(root, '.claude', 'skills', 'multi-tool-skill', 'SKILL.md');
+  const claudeContent = await fs.readFile(claudePath, 'utf-8');
+  const claudeFm = parseFrontmatter(claudeContent).frontmatter;
+  assert.equal(claudeFm.name, 'fd-multi-tool-skill');
+
+  // Check Cursor
+  const cursorPath = path.join(root, '.cursor', 'skills', 'multi-tool-skill', 'SKILL.md');
+  const cursorContent = await fs.readFile(cursorPath, 'utf-8');
+  const cursorFm = parseFrontmatter(cursorContent).frontmatter;
+  assert.equal(cursorFm.name, 'fd-multi-tool-skill');
+});
