@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import type { DetectedTool, Package, InstallOptions, ToolId } from './types.js';
-import { convertToToolFormat, toAiderConfigEntry, parseFrontmatter } from './converter.js';
+import { convertToToolFormat, toAiderConfigEntry, parseFrontmatter, serializeFrontmatter } from './converter.js';
 import {
   installWithSymlink,
   installWithCopy,
@@ -9,6 +9,30 @@ import {
   writeCanonicalPackage,
 } from './symlinker.js';
 import YAML from 'yaml';
+
+const SKILL_NAME_PREFIX = 'fd-';
+
+/**
+ * Prefix skill name with fd- for faster.dev namespace
+ */
+function prefixSkillName(content: string): string {
+  const { frontmatter, body } = parseFrontmatter(content);
+
+  if (!frontmatter.name) {
+    return content;
+  }
+
+  const name = String(frontmatter.name);
+  // Don't double-prefix
+  if (name.startsWith(SKILL_NAME_PREFIX)) {
+    return content;
+  }
+
+  return serializeFrontmatter(
+    { ...frontmatter, name: `${SKILL_NAME_PREFIX}${name}` },
+    body
+  );
+}
 
 export interface InstallResult {
   tool: ToolId;
@@ -379,8 +403,10 @@ async function installSkill(
   }
 
   // Create skill directory and write SKILL.md
+  // Prefix skill name with fd- for faster.dev namespace
+  const prefixedContent = prefixSkillName(content);
   await ensureDir(skillDir);
-  await fs.writeFile(skillPath, content, 'utf-8');
+  await fs.writeFile(skillPath, prefixedContent, 'utf-8');
 
   // Copy any additional files from the package
   for (const file of pkg.files) {

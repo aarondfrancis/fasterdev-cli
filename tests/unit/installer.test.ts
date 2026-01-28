@@ -829,3 +829,49 @@ test('listInstalled works with symlinked files', async () => {
 
   assert.ok(claude?.rules.includes('list-symlink'));
 });
+
+// --- Skill name prefixing tests ---
+
+test('skill name is prefixed with fd- on install', async () => {
+  const root = await tempProject();
+  const pkg = makeSimpleSkillPackage('my-skill', ['claude-code']);
+
+  await installPackage(pkg, [tool('claude-code', root)], root, {
+    global: false,
+    asSkill: true,
+  });
+
+  const skillPath = path.join(root, '.claude', 'skills', 'my-skill', 'SKILL.md');
+  const content = await fs.readFile(skillPath, 'utf-8');
+  const { frontmatter } = parseFrontmatter(content);
+
+  assert.equal(frontmatter.name, 'fd-my-skill');
+});
+
+test('skill name is not double-prefixed if already has fd-', async () => {
+  const root = await tempProject();
+  const pkg: Package = {
+    manifest: {
+      name: 'prefixed-skill',
+      version: '1.0.0',
+      type: 'skill',
+      description: 'Already prefixed skill',
+      compatibility: { skills: ['claude-code'] },
+    },
+    files: [
+      { path: 'manifest.json', content: '{}' },
+      { path: 'SKILL.md', content: '---\nname: fd-already-prefixed\ndescription: Test\n---\n\n# Content' },
+    ],
+  };
+
+  await installPackage(pkg, [tool('claude-code', root)], root, {
+    global: false,
+    asSkill: true,
+  });
+
+  const skillPath = path.join(root, '.claude', 'skills', 'prefixed-skill', 'SKILL.md');
+  const content = await fs.readFile(skillPath, 'utf-8');
+  const { frontmatter } = parseFrontmatter(content);
+
+  assert.equal(frontmatter.name, 'fd-already-prefixed');
+});
